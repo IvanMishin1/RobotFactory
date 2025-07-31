@@ -73,9 +73,9 @@ Material:
     - _OutlineWidth: 0
     - _PerspectiveFilter: 0.875
     - _Reflectivity: 10
-    - _ScaleRatioA: 1
-    - _ScaleRatioB: 1
-    - _ScaleRatioC: 1
+    - _ScaleRatioA: 0.8333333
+    - _ScaleRatioB: 0.6770833
+    - _ScaleRatioC: 0.6770833
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0
@@ -143,7 +143,7 @@ MonoBehaviour:
     m_UnderlineThickness: 3.5
     m_StrikethroughOffset: 15.2
     m_StrikethroughThickness: 3.5
-    m_TabWidth: 42
+    m_TabWidth: 12
   m_Material: {fileID: -2065495048433773497}
   m_SourceFontFileGUID: f97a777eed4fa5b40a05d38a6afaaa9a
   m_CreationSettings:
