@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class CodeEditorManager : MonoBehaviour
 {
     public TMP_InputField codeText;
-    public TMP_Dropdown dropdown;
+
     public GameObject codeEditor;
 
     public Robot selectedRobot = null;
@@ -17,72 +17,36 @@ public class CodeEditorManager : MonoBehaviour
         codeEditor.gameObject.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-    
     public void OpenEditor(Robot robot)
     {
-        codeText.text = string.Empty;
         selectedRobot = robot;
         codeEditor.gameObject.SetActive(true);
-        
-        // Updating the dropdown
-        GameObject[] robots = GameObject.FindGameObjectsWithTag("Robot");
-        dropdown.options.Clear();
-        for (int i = 0; i < robots.Length; i++)
-        {
-            dropdown.options.Add(new TMP_Dropdown.OptionData(robots[i].name));
-        }
-        
-        dropdown.value = dropdown.options.FindIndex(option => option.text == selectedRobot.name);
-        dropdown.RefreshShownValue();
-
-        //selectedRobot = dropdown.options[dropdown.value].text;
-        Debug.LogWarning(codeText.text = LoadCode(selectedRobot.name));
-        Debug.Log("Opened editor for: " + selectedRobot.name);
+        codeText.text = LoadCode(selectedRobot.gameObject.name);
     }
 
-    public void CloseEditor()
+    public void SaveAndCloseEditor()
     {
-        SaveCode();
-        codeEditor.gameObject.SetActive(false);
-
-    }
-
-    public void ChangeRobot()
-    {
-        SaveCode();
-
-        string selectedName = dropdown.options[dropdown.value].text;
-        GameObject[] robots = GameObject.FindGameObjectsWithTag("Robot");
-        GameObject foundRobot = null;
-        foreach (GameObject robot in robots)
+        if (selectedRobot == null)
         {
-            if (robot.gameObject.name == selectedName)
-            {
-                foundRobot = robot;
-                break;
-            }
-        }
-        if (foundRobot == null)
-        {
-            Debug.LogError("Robot not found: " + selectedName);
-            codeText.text = string.Empty;
+            Debug.LogWarning("No robot selected to save code.");
             return;
         }
-        selectedRobot = foundRobot.GetComponent<Robot>();
-
-        string loadedCode = LoadCode(selectedRobot.gameObject.name);
-        Debug.Log($"Loaded code for {selectedRobot.gameObject.name}: '{loadedCode}'");
-        codeText.text = loadedCode;
-        Debug.Log("Changed text to: " + codeText.text);
+        SaveCode();
+        codeEditor.gameObject.SetActive(false);
+        selectedRobot = null;
     }
-
     
-    public string LoadCode(string title)
+    public void RevertToSavedCode()
+    {
+        if (selectedRobot == null)
+        {
+            Debug.LogWarning("No robot selected to revert code.");
+            return;
+        }
+        codeText.text = LoadCode(selectedRobot.gameObject.name);
+    }
+    
+    private string LoadCode(string title)
     {
         string path = Application.dataPath + "/Saves/" + title + ".lua";
         if (File.Exists(path))
@@ -94,7 +58,7 @@ public class CodeEditorManager : MonoBehaviour
         return string.Empty;
     }
     
-    public void SaveCode()
+    private void SaveCode()
     {
         string path = Application.dataPath + "/Saves/" + selectedRobot.gameObject.name + ".lua";
         File.WriteAllText(path, codeText.text);

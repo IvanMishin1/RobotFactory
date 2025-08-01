@@ -31,7 +31,22 @@ public class Robot : MonoBehaviour
         if (busy)
             return;
         busy = true;
-        await state.DoFileAsync(Application.dataPath + "/Saves/" + gameObject.name + ".lua");
+        try
+        {
+            await state.DoFileAsync(Application.dataPath + "/Saves/" + gameObject.name + ".lua");
+        }
+        catch (LuaParseException)
+        {
+            busy = false;
+            Debug.LogError("Lua script parsing error for " + gameObject.name);
+            return;
+        }
+        catch (LuaRuntimeException)
+        {
+            busy = false;
+            Debug.LogError("Lua script parsing error for " + gameObject.name);
+            return;
+        }
         
         busy = false;
     }
