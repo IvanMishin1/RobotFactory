@@ -23,6 +23,9 @@ public class Robot : MonoBehaviour
         state.Environment["left"] = new LuaFunction((context, buffer, ct) => MoveInDirectionAsync(Vector2.left));
         state.Environment["right"] = new LuaFunction((context, buffer, ct) => MoveInDirectionAsync(Vector2.right));
         
+        string path = Application.dataPath + "/Scripts/" + gameObject.name + ".lua";
+        if (!System.IO.File.Exists(path))
+            System.IO.File.WriteAllText(path, string.Empty);
     }
 
     // Update is called once per frame
@@ -33,7 +36,7 @@ public class Robot : MonoBehaviour
         busy = true;
         try
         {
-            await state.DoFileAsync(Application.dataPath + "/Saves/" + gameObject.name + ".lua");
+            await state.DoFileAsync(Application.dataPath + "/Scripts/" + gameObject.name + ".lua");
         }
         catch (LuaParseException)
         {

@@ -12,9 +12,13 @@ public class CodeEditorManager : MonoBehaviour
     public Robot selectedRobot = null;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         codeEditor.gameObject.SetActive(false);
+        if (!Directory.Exists(Application.dataPath + "/Scripts"))
+        {
+            Directory.CreateDirectory(Application.dataPath + "/Scripts");
+        }
     }
 
     public void OpenEditor(Robot robot)
@@ -48,7 +52,7 @@ public class CodeEditorManager : MonoBehaviour
     
     private string LoadCode(string title)
     {
-        string path = Application.dataPath + "/Saves/" + title + ".lua";
+        string path = Application.dataPath + "/Scripts/" + title + ".lua";
         if (File.Exists(path))
         {
             Debug.Log("Loaded Code : " + File.ReadAllText(path) + " from " + path);
@@ -60,7 +64,7 @@ public class CodeEditorManager : MonoBehaviour
     
     private void SaveCode()
     {
-        string path = Application.dataPath + "/Saves/" + selectedRobot.gameObject.name + ".lua";
+        string path = Application.dataPath + "/Scripts/" + selectedRobot.gameObject.name + ".lua";
         File.WriteAllText(path, codeText.text);
         Debug.Log("Saved code : " + codeText.text + " to " + path);
     }

@@ -27,14 +27,14 @@ public class GuideManager : MonoBehaviour
         
         guidePanel.SetActive(true);
         
-        string path = Application.dataPath + "/Guides/" + page + ".txt";
-        if (File.Exists(path))
+        TextAsset textAsset = Resources.Load<TextAsset>("Guides/" + page);
+        if (textAsset != null)
         {
-            guideText.text = File.ReadAllText(path);
+            guideText.text = textAsset.text;
         }
         else
         {
-            Debug.LogError("Guide page not found: " + path);
+            Debug.LogError("Guide page not found: " + page);
         }
     }
 }
