@@ -2,13 +2,18 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class RobotMenuManager : MonoBehaviour
-{ 
+{
     Robot selectedRobot = null;
    CodeEditorManager codeEditorManager;
+   public GameObject robotMenu;
+   private Camera camera;
+   
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         codeEditorManager = GetComponent<CodeEditorManager>();
+        camera = Camera.main;
+        robotMenu.SetActive(false);
     }
 
     // Update is called once per frame
@@ -24,13 +29,29 @@ public class RobotMenuManager : MonoBehaviour
 
             if (hit.collider != null)
             {
-                if (hit.collider.CompareTag("Robot"))
+                Debug.Log("1");
+                if (hit.collider.gameObject.CompareTag("Robot"))
                 {
+                    Debug.Log("2");
                     selectedRobot = hit.collider.gameObject.GetComponent<Robot>();
-                    Debug.Log($"Robot clicked: {selectedRobot.Name}");
-                    codeEditorManager.OpenEditor(selectedRobot);
+                    robotMenu.transform.position = camera.WorldToScreenPoint(selectedRobot.transform.position);
+                    robotMenu.SetActive(true);
+                    //codeEditorManager.OpenEditor(selectedRobot);
                 }
             }
+            else
+            {
+                robotMenu.SetActive(false); 
+                selectedRobot = null;
+            }
+        }
+    }
+    public void OpenEditor()
+    {
+        if (selectedRobot != null)
+        {
+            codeEditorManager.OpenEditor(selectedRobot);
+            robotMenu.SetActive(false);
         }
     }
 }

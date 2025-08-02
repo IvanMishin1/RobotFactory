@@ -1,1 +1,15 @@
 Coding
+
+Coding is done in the Lua programming language. The instructions loop continuously.
+
+The following functions are available for use:
+up()        Moves the robot up.
+down()      Moves the robot down.
+left()      Moves the robot left.
+right()     Moves the robot right.
+
+pickup()
+Picks up an item from the current tile. Accepts an optional string argument to specify the item type. Example: pickup("wood") only picks up wood items.
+
+drop()      
+Drops an item on the current tile.

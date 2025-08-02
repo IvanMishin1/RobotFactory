@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -8,14 +9,18 @@ public class Robot : MonoBehaviour
     public string Name => gameObject.name;
     
     Vector2 movePosition = Vector2.zero;
-    float moveSpeed = 0.5f; 
+    public float moveSpeed = 0.5f; 
     
     private LuaState state;
     
     public bool busy = false;
+    public bool stop = false;
+    
     private Animator animator;
     private int facingDirection = -1;
     private SpriteRenderer spriteRenderer;
+    
+    public Item pickedUpItem = null;
     
     async void Start()
     {
@@ -28,6 +33,8 @@ public class Robot : MonoBehaviour
         state.Environment["down"] = new LuaFunction((context, buffer, ct) => MoveInDirectionAsync(Vector2.down));
         state.Environment["left"] = new LuaFunction((context, buffer, ct) => MoveInDirectionAsync(Vector2.left));
         state.Environment["right"] = new LuaFunction((context, buffer, ct) => MoveInDirectionAsync(Vector2.right));
+        state.Environment["pickup"] = new LuaFunction((context, buffer, ct) => Pickup(context));
+        state.Environment["drop"] = new LuaFunction((context, buffer, ct) => Drop());
         
         string path = Application.dataPath + "/Scripts/" + gameObject.name + ".lua";
         if (!System.IO.File.Exists(path))
@@ -37,7 +44,7 @@ public class Robot : MonoBehaviour
     // Update is called once per frame
     async void Update()
     {
-        if (busy)
+        if (busy || stop)
             return;
         busy = true;
         try
@@ -47,12 +54,14 @@ public class Robot : MonoBehaviour
         catch (LuaParseException)
         {
             busy = false;
+            stop = true;
             Debug.LogError("Lua script parsing error for " + gameObject.name);
             return;
         }
         catch (LuaRuntimeException)
         {
             busy = false;
+            stop = true;
             Debug.LogError("Lua script parsing error for " + gameObject.name);
             return;
         }
@@ -82,9 +91,11 @@ public class Robot : MonoBehaviour
                 spriteRenderer.flipX = true;
             else if (dir.x == 1f && facingDirection == 1)
                 spriteRenderer.flipX = false;
-                
             
-            Debug.Log(dir.x + " " + dir.y);
+            if (dir.y == 1f)
+                spriteRenderer.sortingOrder = 3;
+            else if (dir.y == -1f)
+                spriteRenderer.sortingOrder = 1;
             
             while (Vector2.Distance(transform.position, movePosition) >= 0.01f)
             {
@@ -98,5 +109,41 @@ public class Robot : MonoBehaviour
             animator.SetInteger("y_movement", 0);
             return 0;
         }
+    }
+
+    private ValueTask<int> Pickup(Lua.LuaFunctionExecutionContext context)
+    {
+        string itemType = null;
+        if (pickedUpItem != null)
+            return new ValueTask<int>(0);
+        if (context.ArgumentCount > 0)
+            itemType = context.GetArgument<string>(0);
+        if (Physics2D.OverlapCircle(transform.position, 0.5f, LayerMask.GetMask("Items")) is Collider2D itemCollider)
+        {
+            Item item = itemCollider.GetComponent<Item>();
+            if (!String.IsNullOrEmpty(itemType) && item.itemType != itemType && !item.transform.parent.CompareTag("Machine"))
+            {
+                Debug.Log($"Skipping item: expected type '{itemType}' but found '{item.itemType}'");
+                return new ValueTask<int>(0);
+            }
+            if (item != null)
+            {
+                pickedUpItem = item;
+                pickedUpItem.transform.SetParent(transform);
+                pickedUpItem.transform.position = transform.position;
+            }
+        }
+        return new ValueTask<int>(0);
+    }
+
+    private ValueTask<int> Drop()
+    {
+        if (pickedUpItem != null)
+        {
+            Debug.Log("Dropping " + pickedUpItem.name);
+            pickedUpItem.transform.SetParent(GameObject.Find("Items").transform);
+            pickedUpItem = null;
+        }
+        return new ValueTask<int>(0);
     }
 }
