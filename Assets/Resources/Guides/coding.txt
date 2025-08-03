@@ -13,3 +13,9 @@ Picks up an item from the current tile. Accepts an optional string argument to s
 
 drop()      
 Drops an item on the current tile.
+
+wait()
+Pauses the robot for one second. Accepts an optional integer argument to specify the number of seconds to wait. Example: wait(5) pauses for five seconds.
+
+stop()
+Stops the robot after the current loop iteration. The robot will not execute any further instructions until it is restarted.

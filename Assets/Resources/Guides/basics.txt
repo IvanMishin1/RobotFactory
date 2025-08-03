@@ -1,1 +1,6 @@
 Basics
+
+Your objective is to collect ore from the collect area (located on the left)
+Put them through the smelter to transform them into ingots
+And deliver them to the exit area located on the right
+You get 2$ for every ingot delivered

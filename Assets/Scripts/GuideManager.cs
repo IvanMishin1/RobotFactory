@@ -9,11 +9,13 @@ public class GuideManager : MonoBehaviour
 {
     public TMP_Text guideText;
     public GameObject guidePanel;
-    private string currentPage = "basics";
+    private string currentPage = "coding";
+    private GameManager gameManager;
     
     public void Start()
     {
         guidePanel.SetActive(false);
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
     
     public void CloseGuide()
@@ -22,6 +24,7 @@ public class GuideManager : MonoBehaviour
     }
     public void OpenGuidePage(string page = null)
     {
+        gameManager.GuideOpened();
         if (string.IsNullOrEmpty(page) && !string.IsNullOrEmpty(currentPage))
             page = currentPage;
         

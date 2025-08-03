@@ -9,11 +9,13 @@ public class RobotMenuManager : MonoBehaviour
    CodeEditorManager codeEditorManager;
    public GameObject robotMenu;
    private Camera camera;
+   private GameManager gameManager;
    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         codeEditorManager = GetComponent<CodeEditorManager>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         camera = Camera.main;
         robotMenu.SetActive(false);
     }
@@ -31,10 +33,9 @@ public class RobotMenuManager : MonoBehaviour
 
             if (hit.collider != null)
             {
-                Debug.Log("1");
                 if (hit.collider.gameObject.CompareTag("Robot"))
                 {
-                    Debug.Log("2");
+                    gameManager.RobotMenuOpened(); // TODO: Find a better way to handle this
                     selectedRobot = hit.collider.gameObject.GetComponent<Robot>();
                     robotMenu.transform.position = camera.WorldToScreenPoint(selectedRobot.transform.position);
                     robotMenu.SetActive(true);

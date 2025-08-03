@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class EntryArea : MonoBehaviour
 {
+    public float spawnInterval; // Time in seconds between spawns
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        InvokeRepeating("SpawnOre", 1f, 5f);
-
+        InvokeRepeating("SpawnOre", 1f, spawnInterval);
     }
 
     void SpawnOre()

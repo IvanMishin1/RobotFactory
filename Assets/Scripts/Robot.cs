@@ -35,6 +35,8 @@ public class Robot : MonoBehaviour
         state.Environment["right"] = new LuaFunction((context, buffer, ct) => MoveInDirectionAsync(Vector2.right));
         state.Environment["pickup"] = new LuaFunction((context, buffer, ct) => Pickup(context));
         state.Environment["drop"] = new LuaFunction((context, buffer, ct) => Drop());
+        state.Environment["wait"] = new LuaFunction((context, buffer, ct) => Wait(context));
+        state.Environment["stop"] = new LuaFunction((context, buffer, ct) => Stop());
         
         string path = Application.dataPath + "/Scripts/" + gameObject.name + ".lua";
         if (!System.IO.File.Exists(path))
@@ -75,6 +77,12 @@ public class Robot : MonoBehaviour
         async ValueTask<int> MoveInDirectionCoroutine(Vector2 dir)
         {
             movePosition = (Vector2)transform.position + dir;
+            Collider2D collision = Physics2D.OverlapCircle(movePosition, 0.4f, LayerMask.GetMask("Walls", "Machines"));
+            if (collision != null)
+            {
+                
+                return 0;
+            }
             animator.SetInteger("x_movement", (int)dir.x);
             animator.SetInteger("y_movement", (int)dir.y);
             
@@ -144,6 +152,31 @@ public class Robot : MonoBehaviour
             pickedUpItem.transform.SetParent(GameObject.Find("Items").transform);
             pickedUpItem = null;
         }
+        return new ValueTask<int>(0);
+    }
+
+    private ValueTask<int> Wait(LuaFunctionExecutionContext context)
+    {
+        return WaitCoroutine(context);
+    
+        async ValueTask<int> WaitCoroutine(LuaFunctionExecutionContext ctx)
+        {
+            float seconds = 1f;
+        
+            if (ctx.ArgumentCount > 0)
+                seconds = (float)ctx.GetArgument<double>(0);
+            
+        
+            await Task.Delay((int)(seconds * 1000));
+        
+            return 0;
+        }
+    }
+
+    private ValueTask<int> Stop()
+    {
+        busy = false;
+        stop = true;
         return new ValueTask<int>(0);
     }
 }

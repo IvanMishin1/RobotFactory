@@ -5,6 +5,8 @@ public class Item : MonoBehaviour
     public string itemType = "ore";
     public SpriteRenderer spriteRenderer;
     public string[] itemTypes = { "ore", "ingot", "wood" };
+    public bool hasBeenProcessed = false;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
@@ -15,6 +17,7 @@ public class Item : MonoBehaviour
     public void SetItemType(string type)
     {
         itemType = type;
+        gameObject.name = itemType;
         
         Sprite newSprite = Resources.Load<Sprite>($"Textures/{itemType}");
         if (newSprite != null)

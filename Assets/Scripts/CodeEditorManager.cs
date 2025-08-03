@@ -10,6 +10,7 @@ public class CodeEditorManager : MonoBehaviour
     public GameObject codeEditor;
 
     public Robot selectedRobot = null;
+    private GameManager gameManager;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -19,10 +20,12 @@ public class CodeEditorManager : MonoBehaviour
         {
             Directory.CreateDirectory(Application.dataPath + "/Scripts");
         }
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     public void OpenEditor(Robot robot)
     {
+        gameManager.EditorOpened(); // TODO: Find a better way to handle this
         selectedRobot = robot;
         codeEditor.gameObject.SetActive(true);
         codeText.text = LoadCode(selectedRobot.gameObject.name);
