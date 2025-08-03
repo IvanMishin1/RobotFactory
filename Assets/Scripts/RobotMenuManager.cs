@@ -1,9 +1,11 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class RobotMenuManager : MonoBehaviour
 {
     Robot selectedRobot = null;
+    public TMP_Text stopResumeText;
    CodeEditorManager codeEditorManager;
    public GameObject robotMenu;
    private Camera camera;
@@ -45,6 +47,18 @@ public class RobotMenuManager : MonoBehaviour
                 selectedRobot = null;
             }
         }
+
+        if (selectedRobot != null)
+        {
+            if (selectedRobot.stop)
+            {
+                stopResumeText.text = "Resume";
+            }
+            else if (!selectedRobot.stop)
+            {
+                stopResumeText.text = " Stop after completion ";
+            }
+        }
     }
     public void OpenEditor()
     {
@@ -52,6 +66,21 @@ public class RobotMenuManager : MonoBehaviour
         {
             codeEditorManager.OpenEditor(selectedRobot);
             robotMenu.SetActive(false);
+        }
+    }
+    
+    public void StopResumeRobot()
+    {
+        if (selectedRobot != null)
+        {
+            if (selectedRobot.stop)
+            {
+                selectedRobot.stop = false;
+            }
+            else
+            {
+                selectedRobot.stop = true;
+            }
         }
     }
 }
