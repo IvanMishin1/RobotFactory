@@ -7,11 +7,9 @@ namespace Commands
 {
     public class PickupCommand : Command
     {
-        public override ValueTask<int> Execute(Robot robot, LuaFunctionExecutionContext context)
+        protected override ValueTask<int> ExecuteCommand(Robot robot, LuaFunctionExecutionContext context)
         {
             string itemType = null;
-            if (robot.pickedUpItem != null)
-                return new ValueTask<int>(1);
             if (context.ArgumentCount > 0)
                 itemType = context.GetArgument<string>(0);
             if (Physics2D.OverlapCircle(robot.transform.position, 0.5f, LayerMask.GetMask("Items")) is Collider2D itemCollider)
@@ -29,6 +27,20 @@ namespace Commands
                 }
             }
             return new ValueTask<int>(0);
+        }
+
+        protected override bool CanExecute(Robot robot, LuaFunctionExecutionContext context)
+        {
+            if (!base.CanExecute(robot, context))
+                return false;
+
+            if (robot.pickedUpItem != null)
+                return false;
+
+            if (Physics2D.OverlapCircle(robot.transform.position, 0.5f, LayerMask.GetMask("Items")) == null)
+                return false;
+
+            return true;
         }
     }    
 }

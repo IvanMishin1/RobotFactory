@@ -16,6 +16,7 @@ public class Robot : MonoBehaviour
     
     public bool busy = false;
     public bool stop = false;
+    public bool pause = false;
     
     public Animator animator;
     public int facingDirection = -1;
@@ -38,6 +39,7 @@ public class Robot : MonoBehaviour
         Command.Register("drop", state, this, new DropCommand());
         Command.Register("wait", state, this, new WaitCommand());
         Command.Register("stop", state, this, new StopCommand());
+        Command.Register("pause", state, this, new PauseCommand());
         
         string path = Application.dataPath + "/Scripts/" + gameObject.name + ".lua";
         if (!System.IO.File.Exists(path))

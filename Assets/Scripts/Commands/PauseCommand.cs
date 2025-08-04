@@ -3,12 +3,12 @@ using Lua;
 
 namespace Commands
 {
-    public class StopCommand : Command
+    public class PauseCommand : Command
     {
         protected override ValueTask<int> ExecuteCommand(Robot robot, LuaFunctionExecutionContext context)
         {
-            robot.busy = false;
-            robot.stop = true;
+            robot.busy = true;
+            robot.pause = true;
             return new ValueTask<int>(0);
         }
     }

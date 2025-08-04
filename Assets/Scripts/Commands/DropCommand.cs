@@ -6,14 +6,18 @@ namespace Commands
 {
     public class DropCommand : Command
     {
-        public override ValueTask<int> Execute(Robot robot, LuaFunctionExecutionContext context)
+        protected override ValueTask<int> ExecuteCommand(Robot robot, LuaFunctionExecutionContext context)
         {
-            if (robot.pickedUpItem != null)
-            {
-                robot.pickedUpItem.transform.SetParent(GameObject.Find("Items").transform);
-                robot.pickedUpItem = null;
-            }
+            robot.pickedUpItem.transform.SetParent(GameObject.Find("Items").transform);
+            robot.pickedUpItem = null;
             return new ValueTask<int>(0);
+        }
+
+        protected override bool CanExecute(Robot robot, LuaFunctionExecutionContext context)
+        {
+            if (!base.CanExecute(robot, context))
+                return false;
+            return robot.pickedUpItem != null;
         }
     }
 }

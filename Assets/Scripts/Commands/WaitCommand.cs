@@ -5,7 +5,7 @@ namespace Commands
 {
     public class WaitCommand : Command
     {
-        public override ValueTask<int> Execute(Robot robot, LuaFunctionExecutionContext context)
+        protected override ValueTask<int> ExecuteCommand(Robot robot, LuaFunctionExecutionContext context)
         {
             return WaitCoroutine(context);
             async ValueTask<int> WaitCoroutine(LuaFunctionExecutionContext ctx)

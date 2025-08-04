@@ -6,6 +6,7 @@ public class RobotMenuManager : MonoBehaviour
 {
     Robot selectedRobot = null;
     public TMP_Text stopResumeText;
+    public TMP_Text pauseUnpauseText;
    CodeEditorManager codeEditorManager;
    public GameObject robotMenu;
    private Camera camera;
@@ -52,13 +53,14 @@ public class RobotMenuManager : MonoBehaviour
         if (selectedRobot != null)
         {
             if (selectedRobot.stop)
-            {
-                stopResumeText.text = "Resume";
-            }
+                stopResumeText.text = "Resume execution";
             else if (!selectedRobot.stop)
-            {
-                stopResumeText.text = " Stop after completion ";
-            }
+                stopResumeText.text = "Stop execution";
+            
+            if (selectedRobot.pause)
+                pauseUnpauseText.text = "Unpause execution";
+            else if (!selectedRobot.pause)
+                pauseUnpauseText.text = "Pause execution";
         }
     }
     public void OpenEditor()
@@ -78,6 +80,17 @@ public class RobotMenuManager : MonoBehaviour
                 selectedRobot.stop = false;
             else
                 selectedRobot.stop = true;
+        }
+    }
+
+    public void PauseUnpauseRobot()
+    {
+        if (selectedRobot != null)
+        {
+            if (selectedRobot.pause)
+                selectedRobot.pause = false;
+            else
+                selectedRobot.pause = true;
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Commands
             this.direction = direction;
         }
 
-        public override ValueTask<int> Execute(Robot robot, LuaFunctionExecutionContext context)
+        protected override ValueTask<int> ExecuteCommand(Robot robot, LuaFunctionExecutionContext context)
         {
             return MoveInDirectionAsync(robot, direction);
         }
@@ -21,9 +21,6 @@ namespace Commands
         private async ValueTask<int> MoveInDirectionAsync(Robot robot, Vector2 dir)
         {
             Vector2 movePosition = (Vector2)robot.transform.position + dir;
-            Collider2D collision = Physics2D.OverlapCircle(movePosition, 0.4f, LayerMask.GetMask("Walls", "Machines"));
-            if (collision != null)
-                return 1;
 
             robot.animator.SetInteger("x_movement", (int)dir.x);
             robot.animator.SetInteger("y_movement", (int)dir.y);
@@ -56,6 +53,17 @@ namespace Commands
             robot.animator.SetInteger("x_movement", 0);
             robot.animator.SetInteger("y_movement", 0);
             return 0;
+        }
+        
+        protected override bool CanExecute(Robot robot, LuaFunctionExecutionContext context)
+        {
+            if (!base.CanExecute(robot, context))
+                return false;
+
+            if (Physics2D.OverlapCircle((Vector2)robot.transform.position + direction, 0.4f, LayerMask.GetMask("Walls", "Machines")) != null)
+                return false;
+            
+            return true;
         }
     }
 }
