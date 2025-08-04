@@ -1,6 +1,7 @@
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -10,7 +11,20 @@ public class GameManager : MonoBehaviour
     public TMP_Text moneyText;
     public int tutorialStep = 0;
     public TMP_Text tutorialText;
+   
+    [Header("Tutorial Events")]
+    public UnityEvent onRobotMenuOpened = new UnityEvent();
+    public UnityEvent onEditorOpened = new UnityEvent();
+    public UnityEvent onGuideOpened = new UnityEvent();
+    public UnityEvent onTutorialClicked = new UnityEvent();
     
+	void Awake()
+	{
+	    onRobotMenuOpened.AddListener(HandleRobotMenuOpened);
+    	onEditorOpened.AddListener(HandleEditorOpened);
+    	onGuideOpened.AddListener(HandleGuideOpened);
+	}
+ 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -41,15 +55,15 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    public void RobotMenuOpened()
+    private void HandleRobotMenuOpened()
     {
         if (tutorialStep == 1)
         {
             TutorialStep();
         }
     }
-    
-    public void EditorOpened()
+
+    private void HandleEditorOpened()
     {
         if (tutorialStep == 2)
         {
@@ -57,14 +71,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void GuideOpened()
+    private void HandleGuideOpened()
     {
         if (tutorialStep == 3)
         {
             TutorialStep();
         }
     }
-    public void ClickedGuide()
+
+    public void HandleTutorialClicked()
     {
         if (tutorialStep == 0 || tutorialStep == 5)
         {

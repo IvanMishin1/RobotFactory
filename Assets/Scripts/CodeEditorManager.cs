@@ -25,7 +25,7 @@ public class CodeEditorManager : MonoBehaviour
 
     public void OpenEditor(Robot robot)
     {
-        gameManager.EditorOpened(); // TODO: Find a better way to handle this
+        gameManager.onEditorOpened.Invoke();
         selectedRobot = robot;
         codeEditor.gameObject.SetActive(true);
         codeText.text = LoadCode(selectedRobot.gameObject.name);

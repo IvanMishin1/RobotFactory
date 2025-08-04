@@ -79,10 +79,8 @@ public class Robot : MonoBehaviour
             movePosition = (Vector2)transform.position + dir;
             Collider2D collision = Physics2D.OverlapCircle(movePosition, 0.4f, LayerMask.GetMask("Walls", "Machines"));
             if (collision != null)
-            {
-                
-                return 0;
-            }
+                return 1;
+            
             animator.SetInteger("x_movement", (int)dir.x);
             animator.SetInteger("y_movement", (int)dir.y);
             
@@ -107,9 +105,7 @@ public class Robot : MonoBehaviour
             
             while (Vector2.Distance(transform.position, movePosition) >= 0.01f)
             {
-                // Move towards the target position
-                transform.position = Vector2.MoveTowards(transform.position, movePosition, Time.deltaTime * moveSpeed); // 5f is speed
-                
+                transform.position = Vector2.MoveTowards(transform.position, movePosition, Time.deltaTime * moveSpeed);
                 await Task.Yield();
             }
             transform.position = movePosition;
@@ -123,7 +119,7 @@ public class Robot : MonoBehaviour
     {
         string itemType = null;
         if (pickedUpItem != null)
-            return new ValueTask<int>(0);
+            return new ValueTask<int>(1);
         if (context.ArgumentCount > 0)
             itemType = context.GetArgument<string>(0);
         if (Physics2D.OverlapCircle(transform.position, 0.5f, LayerMask.GetMask("Items")) is Collider2D itemCollider)
@@ -131,8 +127,7 @@ public class Robot : MonoBehaviour
             Item item = itemCollider.GetComponent<Item>();
             if (!String.IsNullOrEmpty(itemType) && item.itemType != itemType && !item.transform.parent.CompareTag("Machine"))
             {
-                Debug.Log($"Skipping item: expected type '{itemType}' but found '{item.itemType}'");
-                return new ValueTask<int>(0);
+                return new ValueTask<int>(1);
             }
             if (item != null)
             {
@@ -151,6 +146,7 @@ public class Robot : MonoBehaviour
             Debug.Log("Dropping " + pickedUpItem.name);
             pickedUpItem.transform.SetParent(GameObject.Find("Items").transform);
             pickedUpItem = null;
+            Debug.Log("Dropped item successfully");
         }
         return new ValueTask<int>(0);
     }
@@ -158,17 +154,12 @@ public class Robot : MonoBehaviour
     private ValueTask<int> Wait(LuaFunctionExecutionContext context)
     {
         return WaitCoroutine(context);
-    
         async ValueTask<int> WaitCoroutine(LuaFunctionExecutionContext ctx)
         {
             float seconds = 1f;
-        
             if (ctx.ArgumentCount > 0)
                 seconds = (float)ctx.GetArgument<double>(0);
-            
-        
             await Task.Delay((int)(seconds * 1000));
-        
             return 0;
         }
     }

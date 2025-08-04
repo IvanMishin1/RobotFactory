@@ -35,7 +35,7 @@ public class RobotMenuManager : MonoBehaviour
             {
                 if (hit.collider.gameObject.CompareTag("Robot"))
                 {
-                    gameManager.RobotMenuOpened(); // TODO: Find a better way to handle this
+                    gameManager.onRobotMenuOpened.Invoke();
                     selectedRobot = hit.collider.gameObject.GetComponent<Robot>();
                     robotMenu.transform.position = camera.WorldToScreenPoint(selectedRobot.transform.position);
                     robotMenu.SetActive(true);
@@ -75,13 +75,9 @@ public class RobotMenuManager : MonoBehaviour
         if (selectedRobot != null)
         {
             if (selectedRobot.stop)
-            {
                 selectedRobot.stop = false;
-            }
             else
-            {
                 selectedRobot.stop = true;
-            }
         }
     }
 }

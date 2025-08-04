@@ -24,7 +24,7 @@ public class GuideManager : MonoBehaviour
     }
     public void OpenGuidePage(string page = null)
     {
-        gameManager.GuideOpened();
+        gameManager.onGuideOpened.Invoke();
         if (string.IsNullOrEmpty(page) && !string.IsNullOrEmpty(currentPage))
             page = currentPage;
         

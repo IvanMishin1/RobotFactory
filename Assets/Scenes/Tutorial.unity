@@ -630,6 +630,18 @@ MonoBehaviour:
   moneyText: {fileID: 2052173823}
   tutorialStep: 0
   tutorialText: {fileID: 360309683}
+  onRobotMenuOpened:
+    m_PersistentCalls:
+      m_Calls: []
+  onEditorOpened:
+    m_PersistentCalls:
+      m_Calls: []
+  onGuideOpened:
+    m_PersistentCalls:
+      m_Calls: []
+  onTutorialClicked:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &258142933
 GameObject:
   m_ObjectHideFlags: 0
@@ -2656,7 +2668,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 251130557}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: ClickedGuide
+        m_MethodName: HandleTutorialClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
