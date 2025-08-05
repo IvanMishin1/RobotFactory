@@ -30,7 +30,7 @@ public class Robot : MonoBehaviour
     
     public Item pickedUpItem = null;
     
-    async void Start()
+    void Start()
     {
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -97,7 +97,7 @@ public class Robot : MonoBehaviour
     }
     private IEnumerator ResetStatusAfterDelay()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         statusSpriteRenderer.sprite = null;
         if (Pause)
             DisplayToggleStatus("paused");

@@ -14,6 +14,7 @@ namespace Commands
             if (!CanExecute(robot, context) || robot == null || robot.Stop)
             {
                 robot.DisplayToggleStatus("action_error");
+                await Task.Delay(1000); 
                 return 1;
             }
             return await ExecuteCommand(robot, context);
