@@ -8,7 +8,7 @@ namespace Commands
         protected override ValueTask<int> ExecuteCommand(Robot robot, LuaFunctionExecutionContext context)
         {
             robot.busy = true;
-            robot.pause = true;
+            robot.Pause = true;
             return new ValueTask<int>(0);
         }
     }

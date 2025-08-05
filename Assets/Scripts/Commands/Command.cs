@@ -7,14 +7,13 @@ namespace Commands
     {
         public async ValueTask<int> CallCommand(Robot robot, LuaFunctionExecutionContext context)
         {
-            while (robot != null && robot.pause)
+            while (robot != null && robot.Pause)
             {
                 await Task.Yield();
             }
-            if (!CanExecute(robot, context) || robot == null || robot.stop)
+            if (!CanExecute(robot, context) || robot == null || robot.Stop)
             {
-                robot.stop = true;
-                robot.busy = false;
+                robot.DisplayToggleStatus("action_error");
                 return 1;
             }
             return await ExecuteCommand(robot, context);
@@ -27,7 +26,7 @@ namespace Commands
         }
         protected virtual bool CanExecute(Robot robot, LuaFunctionExecutionContext context)
         {
-            return robot != null && !robot.stop;
+            return robot != null && !robot.Stop;
         }
     }    
 }

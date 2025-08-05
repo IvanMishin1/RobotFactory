@@ -1,3 +1,1 @@
-right()
-right()
-right()
+left()

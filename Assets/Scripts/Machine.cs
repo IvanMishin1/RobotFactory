@@ -5,6 +5,7 @@ public class Machine : MonoBehaviour
     public string role;
     public AudioSource audioSource;
     public AudioClip[] clips;
+    public GameObject itemsContainer;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -16,13 +17,13 @@ public class Machine : MonoBehaviour
     {
         if (role == "machine")
         {
-            foreach (Transform child in transform)
+            foreach (Transform child in itemsContainer.transform)
             {
                 if (child.CompareTag("Item"))
                 {
                     Rigidbody2D rb = child.GetComponent<Rigidbody2D>();
                     rb.AddForce(child.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(1, 0) * Time.deltaTime * 0.1f, ForceMode2D.Force);
-                    if (child.position.x > 0f)
+                    if (child.localPosition.x > 0f)
                     {
                         Item item = child.GetComponent<Item>();
                         if (!item.hasBeenProcessed)
@@ -36,7 +37,7 @@ public class Machine : MonoBehaviour
                         }
                     }
 
-                    if (child.position.x > -0.5f && child.position.x < 0.5f)
+                    if (child.localPosition.x > -0.5f && child.localPosition.x < 0.5f)
                     {
                         if (audioSource != null && !audioSource.isPlaying)
                         {
@@ -55,9 +56,9 @@ public class Machine : MonoBehaviour
             if (other.CompareTag("Item"))
             {
                 Item item = other.GetComponent<Item>();
-                if (item != null && !item.transform.parent.CompareTag("Robot") && item.transform.parent != transform.parent)
+                if (item != null && !item.transform.parent.CompareTag("Robot") && item.transform.parent != itemsContainer.transform)
                 {
-                    item.transform.SetParent(transform.parent);
+                    item.transform.SetParent(itemsContainer.transform);
                 }
             }
         }
@@ -67,7 +68,7 @@ public class Machine : MonoBehaviour
     {
         if (role == "out")
         {
-            if (other.CompareTag("Item") && other.transform.parent == transform.parent)
+            if (other.CompareTag("Item") && other.transform.parent == itemsContainer.transform)
             {
                 Item item = other.GetComponent<Item>();
                 if (item != null)

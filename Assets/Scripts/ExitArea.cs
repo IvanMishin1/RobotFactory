@@ -10,7 +10,6 @@ public class ExitArea : MonoBehaviour
     
     void OnTriggerStay2D(Collider2D other)
     {
-        Debug.Log("OnTriggerStay2D");
         if (other.CompareTag("Item"))
         {
             Item item = other.GetComponent<Item>();

@@ -9,7 +9,7 @@ public class RobotMenuManager : MonoBehaviour
     public TMP_Text pauseUnpauseText;
    CodeEditorManager codeEditorManager;
    public GameObject robotMenu;
-   private Camera camera;
+   private Camera mainCamera;
    private GameManager gameManager;
    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -17,7 +17,7 @@ public class RobotMenuManager : MonoBehaviour
     {
         codeEditorManager = GetComponent<CodeEditorManager>();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        camera = Camera.main;
+        mainCamera = Camera.main;
         robotMenu.SetActive(false);
     }
 
@@ -38,7 +38,7 @@ public class RobotMenuManager : MonoBehaviour
                 {
                     gameManager.onRobotMenuOpened.Invoke();
                     selectedRobot = hit.collider.gameObject.GetComponent<Robot>();
-                    robotMenu.transform.position = camera.WorldToScreenPoint(selectedRobot.transform.position);
+                    robotMenu.transform.position = mainCamera.WorldToScreenPoint(selectedRobot.transform.position);
                     robotMenu.SetActive(true);
                     //codeEditorManager.OpenEditor(selectedRobot);
                 }
@@ -52,14 +52,14 @@ public class RobotMenuManager : MonoBehaviour
 
         if (selectedRobot != null)
         {
-            if (selectedRobot.stop)
+            if (selectedRobot.Stop)
                 stopResumeText.text = "Resume execution";
-            else if (!selectedRobot.stop)
+            else if (!selectedRobot.Stop)
                 stopResumeText.text = "Stop execution";
             
-            if (selectedRobot.pause)
+            if (selectedRobot.Pause)
                 pauseUnpauseText.text = "Unpause execution";
-            else if (!selectedRobot.pause)
+            else if (!selectedRobot.Pause)
                 pauseUnpauseText.text = "Pause execution";
         }
     }
@@ -76,10 +76,10 @@ public class RobotMenuManager : MonoBehaviour
     {
         if (selectedRobot != null)
         {
-            if (selectedRobot.stop)
-                selectedRobot.stop = false;
+            if (selectedRobot.Stop)
+                selectedRobot.Stop = false;
             else
-                selectedRobot.stop = true;
+                selectedRobot.Stop = true;
         }
     }
 
@@ -87,10 +87,10 @@ public class RobotMenuManager : MonoBehaviour
     {
         if (selectedRobot != null)
         {
-            if (selectedRobot.pause)
-                selectedRobot.pause = false;
+            if (selectedRobot.Pause)
+                selectedRobot.Pause = false;
             else
-                selectedRobot.pause = true;
+                selectedRobot.Pause = true;
         }
     }
 }

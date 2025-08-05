@@ -40,6 +40,8 @@ public class CodeEditorManager : MonoBehaviour
         }
         SaveCode();
         codeEditor.gameObject.SetActive(false);
+        selectedRobot.Stop = false;
+        selectedRobot.DisplayToggleStatus(null);
         selectedRobot = null;
     }
     
@@ -58,7 +60,6 @@ public class CodeEditorManager : MonoBehaviour
         string path = Application.dataPath + "/Scripts/" + title + ".lua";
         if (File.Exists(path))
         {
-            Debug.Log("Loaded Code : " + File.ReadAllText(path) + " from " + path);
             return File.ReadAllText(path);
         }
         File.WriteAllText(path, string.Empty);
@@ -69,6 +70,5 @@ public class CodeEditorManager : MonoBehaviour
     {
         string path = Application.dataPath + "/Scripts/" + selectedRobot.gameObject.name + ".lua";
         File.WriteAllText(path, codeText.text);
-        Debug.Log("Saved code : " + codeText.text + " to " + path);
     }
 }
