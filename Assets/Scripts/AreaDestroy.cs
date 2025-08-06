@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ExitArea : MonoBehaviour
+public class AreaDestroy : MonoBehaviour
 {
     private GameManager gameManager;
     private void Start()
