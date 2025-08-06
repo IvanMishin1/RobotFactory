@@ -13,9 +13,18 @@ namespace Commands
             this.direction = direction;
         }
 
-        protected override ValueTask<int> ExecuteCommand(Robot robot, LuaFunctionExecutionContext context)
+        protected override async ValueTask<int> ExecuteCommand(Robot robot, LuaFunctionExecutionContext context)
         {
-            return MoveInDirectionAsync(robot, direction);
+            int distance = 1;
+            if (context.ArgumentCount > 0)
+                distance = context.GetArgument<int>(0);
+            for (int i = 0; i < distance; i++)
+            {
+                if (!CanExecute(robot, context))
+                    return 1;
+                await MoveInDirectionAsync(robot, direction);
+            }
+            return 0;
         }
         
         private async ValueTask<int> MoveInDirectionAsync(Robot robot, Vector2 dir)
