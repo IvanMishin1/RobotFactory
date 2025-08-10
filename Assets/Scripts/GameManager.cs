@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    string gameType = "demo";
     float money = 0f;
     public TMP_Text moneyText;
     public int tutorialStep = 0;
@@ -17,12 +16,15 @@ public class GameManager : MonoBehaviour
     public UnityEvent onEditorOpened = new UnityEvent();
     public UnityEvent onGuideOpened = new UnityEvent();
     public UnityEvent onTutorialClicked = new UnityEvent();
+
+    private RobotManager robotManager;
     
 	void Awake()
 	{
 	    onRobotMenuOpened.AddListener(HandleRobotMenuOpened);
     	onEditorOpened.AddListener(HandleEditorOpened);
     	onGuideOpened.AddListener(HandleGuideOpened);
+        robotManager = GameObject.Find("RobotManager").GetComponent<RobotManager>();
 	}
  
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -30,10 +32,8 @@ public class GameManager : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
-            var r = Object.Instantiate(Resources.Load("Prefabs/Robot"), new Vector3(0, 0, 0), Quaternion.identity);
-            r.name = "Robot1";
-            r.GetComponent<Transform>().position = GameObject.Find("Robots").transform.position;
-            r.GetComponent<Transform>().parent = GameObject.Find("Robots").transform;
+            robotManager.CreateRobot(new Vector2(0, 0));
+            robotManager.CreateRobot(new Vector2(1, 0));
             tutorialText.text = "Welcome to Robot Factory!\nClick here to continue";
         }
         moneyText.text = $"Net Gain: 0$";

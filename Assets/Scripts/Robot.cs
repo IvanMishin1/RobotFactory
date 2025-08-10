@@ -27,6 +27,7 @@ public class Robot : MonoBehaviour
     public int facingDirection = -1;
     public SpriteRenderer spriteRenderer;
     public SpriteRenderer statusSpriteRenderer;
+	public Vector2 startingPosition;
     
     public Item pickedUpItem = null;
     
@@ -60,6 +61,7 @@ public class Robot : MonoBehaviour
         busy = true;
         try
         {
+			startingPosition = transform.position;
             await state.DoFileAsync(Application.dataPath + "/Scripts/" + gameObject.name + ".lua");
         }
         catch (LuaParseException)
