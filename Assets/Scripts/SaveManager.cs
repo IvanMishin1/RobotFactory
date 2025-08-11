@@ -1,11 +1,13 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Text.Json;
 
-
 public class SaveManager : MonoBehaviour
 {
+    private RobotManager robotManager;
+    
     [Serializable]
     public class RobotData
     {
@@ -14,8 +16,12 @@ public class SaveManager : MonoBehaviour
         public float y;
         public bool paused;
         public bool stopped;
-
-        public RobotData(string name, Vector2 position, bool paused, bool stopped)
+        
+        public RobotData()
+        {
+        }
+        
+        public void SetValues(string name, Vector2 position, bool paused, bool stopped)
         {
             this.name = name;
             this.x = position.x;
@@ -23,6 +29,11 @@ public class SaveManager : MonoBehaviour
             this.paused = paused;
             this.stopped = stopped;
         }
+    }
+
+    public void Start()
+    {
+        robotManager = GameObject.Find("RobotManager").GetComponent<RobotManager>();
     }
     
     public void SaveGame()
@@ -35,7 +46,8 @@ public class SaveManager : MonoBehaviour
             Robot robotComponent = robotObject.GetComponent<Robot>();
             if (robotComponent != null)
             {
-                RobotData robotData = new RobotData(
+                RobotData robotData = new RobotData();
+                robotData.SetValues(
                     robotComponent.name,
                     robotComponent.startingPosition,
                     robotComponent.Pause,
@@ -56,5 +68,20 @@ public class SaveManager : MonoBehaviour
         	System.IO.File.WriteAllText(path, json);
 		}
 	}
+
+    public void LoadGame(bool viewOnly = false)
+    {
+        string json = File.ReadAllText(Application.dataPath + "/Saves/robots.json");
+        List<RobotData> robotsData = JsonSerializer.Deserialize<List<RobotData>>(json);
+
+        if (!viewOnly)
+        {
+            robotManager.DestroyAllRobots();
+            foreach (var robot in robotsData)
+            {
+                robotManager.CreateRobot(new Vector2(robot.x, robot.y));
+            }
+        }
+    }
 }
 
