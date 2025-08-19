@@ -49,7 +49,7 @@ public class Robot : MonoBehaviour
         Command.Register("stop", state, this, new StopCommand());
         Command.Register("pause", state, this, new PauseCommand());
         
-        string path = Application.dataPath + "/Scripts/" + gameObject.name + ".lua";
+        string path = Application.dataPath + "/Saves/" + gameObject.name + ".lua";
         if (!System.IO.File.Exists(path))
             System.IO.File.WriteAllText(path, string.Empty);
     }
@@ -62,7 +62,7 @@ public class Robot : MonoBehaviour
         try
         {
 			startingPosition = transform.position;
-            await state.DoFileAsync(Application.dataPath + "/Scripts/" + gameObject.name + ".lua");
+            await state.DoFileAsync(Application.dataPath + "/Saves/" + gameObject.name + ".lua");
         }
         catch (LuaParseException)
         {

@@ -1,18 +1,24 @@
+using System;
 using UnityEngine;
 
 public class RobotManager : MonoBehaviour
 {
-    private int robotId = 0;
+    private int robotId = 0; // TODO: This should be stored
     private GameObject robotPrefab;
-    void Start()
+    void Awake()
     {
+        // Awake to ensure the prefab is loaded before any robots are created
         robotPrefab = Resources.Load<GameObject>("Prefabs/Robot");
+        if (robotPrefab == null)
+            Debug.LogError("Robot prefab not found in Resources/Prefabs/Robot");
     }
-    public GameObject CreateRobot(Vector2 position)
+    public GameObject CreateRobot(Vector2 position, string robotName = null)
     {
-        // TODO: Add more arguments
         GameObject robot = Instantiate(robotPrefab, position, Quaternion.identity);
-        robot.name = "Robot" + robotId++;
+        if (String.IsNullOrEmpty(robotName))
+            robot.name = "Robot" + robotId++;
+        else
+            robot.name = robotName;
         robot.transform.position = position;
         robot.transform.parent = transform;
         return robot;

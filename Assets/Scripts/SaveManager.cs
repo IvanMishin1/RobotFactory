@@ -31,13 +31,16 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    public void Start()
+    public void Awake()
     {
         robotManager = GameObject.Find("RobotManager").GetComponent<RobotManager>();
     }
     
-    public void SaveGame()
+    public void SaveGame(string gameName)
     {
+        if (string.IsNullOrWhiteSpace(gameName))
+            throw new ArgumentException("gameName cannot be null, empty, or whitespace.", nameof(gameName));
+        
         GameObject[] robots = GameObject.FindGameObjectsWithTag("Robot");
         List<RobotData> robotsData = new List<RobotData>();
         
@@ -53,35 +56,42 @@ public class SaveManager : MonoBehaviour
                     robotComponent.Pause,
                     robotComponent.Stop
                 );
-                Debug.Log("Saving robot: " + robotData.name);
 				robotsData.Add(robotData);
             }
         }
+        
         string json = JsonSerializer.Serialize(robotsData, new JsonSerializerOptions { WriteIndented = true, IncludeFields = true });
-        string path = Application.dataPath + "/Saves/robots.json";
-
-        if (!System.IO.Directory.Exists(Application.dataPath + "/Saves/"))
-			System.IO.Directory.CreateDirectory(Application.dataPath + "/Saves/");
-		else
-		{
-			System.IO.Directory.CreateDirectory(Application.dataPath + "/Saves/");
-        	System.IO.File.WriteAllText(path, json);
-		}
+        string robotsPath = Application.dataPath + "/Saves/" + gameName + "/robots.json";
+        
+        if (!Directory.Exists(Application.dataPath + "/Saves/" + gameName))
+            Directory.CreateDirectory(Application.dataPath + "/Saves/" + gameName);
+        File.WriteAllText(robotsPath, json);
 	}
 
-    public void LoadGame(bool viewOnly = false)
+    public void LoadGame(string gameName)
     {
-        string json = File.ReadAllText(Application.dataPath + "/Saves/robots.json");
-        List<RobotData> robotsData = JsonSerializer.Deserialize<List<RobotData>>(json);
-
-        if (!viewOnly)
+        if (string.IsNullOrWhiteSpace(gameName))
+            throw new ArgumentException("gameName cannot be null, empty, or whitespace.", nameof(gameName));
+        
+        string json = File.ReadAllText(Application.dataPath + "/Saves/"+ gameName +"/robots.json");
+        List<RobotData> robotsData = JsonSerializer.Deserialize<List<RobotData>>(json, new JsonSerializerOptions { IncludeFields = true });
+        
+        robotManager.DestroyAllRobots();
+        foreach (var robot in robotsData)
         {
-            robotManager.DestroyAllRobots();
-            foreach (var robot in robotsData)
-            {
-                robotManager.CreateRobot(new Vector2(robot.x, robot.y));
-            }
+            robotManager.CreateRobot(new Vector2(robot.x, robot.y), robot.name);
         }
+    }
+    
+    public void CreateGame(string gameName)
+    {
+        if (string.IsNullOrWhiteSpace(gameName))
+            throw new ArgumentException("gameName cannot be null, empty, or whitespace.", nameof(gameName));
+        
+        Directory.CreateDirectory(Application.dataPath + "/Saves/" + gameName);
+        File.WriteAllText(Application.dataPath + "/Saves/" + gameName + "/robots.json", "[]");
+        File.WriteAllText(Application.dataPath + "/Saves/" + gameName + "/saveinfo.json", "[]");
+        robotManager.CreateRobot(new Vector2(0, 0));
     }
 }
 

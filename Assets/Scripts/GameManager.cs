@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -18,6 +19,8 @@ public class GameManager : MonoBehaviour
     public UnityEvent onTutorialClicked = new UnityEvent();
 
     private RobotManager robotManager;
+    private GameContext gameContext;
+    private SaveManager saveManager;
     
 	void Awake()
 	{
@@ -25,19 +28,27 @@ public class GameManager : MonoBehaviour
     	onEditorOpened.AddListener(HandleEditorOpened);
     	onGuideOpened.AddListener(HandleGuideOpened);
         robotManager = GameObject.Find("RobotManager").GetComponent<RobotManager>();
+        saveManager = GameObject.Find("GameManager").GetComponent<SaveManager>();
+        gameContext = GameObject.Find("GameContext").GetComponent<GameContext>();
 	}
  
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if (SceneManager.GetActiveScene().buildIndex == 0)
+        Debug.Log($"Loading {gameContext.gameName}. New Game: {gameContext.isNewGame}");
+        if (gameContext.isNewGame)
         {
-            robotManager.CreateRobot(new Vector2(0, 0));
-            robotManager.CreateRobot(new Vector2(1, 0));
+            saveManager.CreateGame(gameContext.gameName);
+            tutorialStep = 0;
             tutorialText.text = "Welcome to Robot Factory!\nClick here to continue";
         }
+        if (String.IsNullOrEmpty(gameContext.gameName) && Application.isEditor) // TODO: For testing without menu
+            gameContext.gameName = "testsave1";
+        if (!gameContext.isNewGame)
+        {
+            saveManager.LoadGame(gameContext.gameName);
+        }
         moneyText.text = $"Net Gain: 0$";
-
     }
 
     public void ItemExited(Item item)
@@ -89,7 +100,7 @@ public class GameManager : MonoBehaviour
     
     void TutorialStep()
     {
-        if (SceneManager.GetActiveScene().buildIndex == 0)
+        if (SceneManager.GetActiveScene().buildIndex == 1)
         {
             tutorialStep++;
             switch (tutorialStep)
