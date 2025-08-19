@@ -28,7 +28,6 @@ namespace UI
 
         public void OpenEditor(Robot robot)
         {
-            gameManager.onEditorOpened.Invoke();
             selectedRobot = robot;
             codeEditor.gameObject.SetActive(true);
             codeText.text = LoadCode(selectedRobot.gameObject.name);

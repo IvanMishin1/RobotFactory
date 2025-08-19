@@ -26,7 +26,6 @@ namespace UI
 
         public void OpenGuidePage(string page = null)
         {
-            gameManager.onGuideOpened.Invoke();
             if (string.IsNullOrEmpty(page) && !string.IsNullOrEmpty(currentPage))
                 page = currentPage;
 

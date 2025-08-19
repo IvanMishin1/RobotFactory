@@ -14,7 +14,6 @@ namespace UI
         private Camera mainCamera;
         private GameManager gameManager;
 
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
             codeEditorManager = GetComponent<CodeEditorManager>();
@@ -23,7 +22,6 @@ namespace UI
             robotMenu.SetActive(false);
         }
 
-        // Update is called once per frame
         void Update()
         {
             if (Input.GetMouseButtonDown(0))
@@ -38,11 +36,9 @@ namespace UI
                 {
                     if (hit.collider.gameObject.CompareTag("Robot"))
                     {
-                        gameManager.onRobotMenuOpened.Invoke();
                         selectedRobot = hit.collider.gameObject.GetComponent<Robot>();
                         robotMenu.transform.position = mainCamera.WorldToScreenPoint(selectedRobot.transform.position);
                         robotMenu.SetActive(true);
-                        //codeEditorManager.OpenEditor(selectedRobot);
                     }
                 }
                 else
