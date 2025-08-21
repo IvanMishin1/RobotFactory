@@ -203,7 +203,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 23.8
+  m_fontSize: 56
   m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1830,8 +1830,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1972808981}
-        m_TargetAssemblyTypeName: UI.CodeEditorManager, Assembly-CSharp
+      - m_Target: {fileID: 773788676}
+        m_TargetAssemblyTypeName: CodeEditorManager, Assembly-CSharp
         m_MethodName: SaveAndCloseEditor
         m_Mode: 1
         m_Arguments:
@@ -2184,7 +2184,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 23.8
+  m_fontSize: 56
   m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2443,8 +2443,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1972808981}
-        m_TargetAssemblyTypeName: UI.CodeEditorManager, Assembly-CSharp
+      - m_Target: {fileID: 773788676}
+        m_TargetAssemblyTypeName: CodeEditorManager, Assembly-CSharp
         m_MethodName: RevertToSavedCode
         m_Mode: 1
         m_Arguments:
@@ -2671,10 +2671,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.06623236
+    x: 0.19843751
     y: 0
-    width: 0.86644953
-    height: 1
+    width: 0.30406252
+    height: 0.3861111
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
@@ -2818,7 +2818,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22.85
+  m_fontSize: 51.3
   m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2883,7 +2883,7 @@ GameObject:
   - component: {fileID: 541126790}
   - component: {fileID: 541126789}
   m_Layer: 5
-  m_Name: ButtonCoding
+  m_Name: Button2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2953,8 +2953,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1972808979}
-        m_TargetAssemblyTypeName: UI.GuideManager, Assembly-CSharp
+      - m_Target: {fileID: 773788679}
+        m_TargetAssemblyTypeName: GuideManager, Assembly-CSharp
         m_MethodName: OpenGuidePage
         m_Mode: 5
         m_Arguments:
@@ -3381,8 +3381,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1972808980}
-        m_TargetAssemblyTypeName: UI.RobotMenuManager, Assembly-CSharp
+      - m_Target: {fileID: 773788678}
+        m_TargetAssemblyTypeName: RobotMenuManager, Assembly-CSharp
         m_MethodName: StopResumeRobot
         m_Mode: 1
         m_Arguments:
@@ -3904,6 +3904,84 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 749103381}
   m_CullTransparentMesh: 1
+--- !u!1 &773788675
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 773788677}
+  - component: {fileID: 773788676}
+  - component: {fileID: 773788678}
+  - component: {fileID: 773788679}
+  m_Layer: 0
+  m_Name: UIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &773788676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 773788675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c5951ba60c59a94dab2354b5431d5db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  codeText: {fileID: 645089357}
+  codeEditor: {fileID: 1876075609}
+  selectedRobot: {fileID: 0}
+--- !u!4 &773788677
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 773788675}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 455.57748, y: 365.8625, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &773788678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 773788675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f813311c116fb5142befc151ffb17c6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stopResumeText: {fileID: 1486032950}
+  pauseUnpauseText: {fileID: 1597020260}
+  robotMenu: {fileID: 1835817310}
+--- !u!114 &773788679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 773788675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff9dffcf13094572bf14ab27240041f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  guideText: {fileID: 719077825}
+  guidePanel: {fileID: 1178907859}
 --- !u!1 &820906569
 GameObject:
   m_ObjectHideFlags: 0
@@ -4159,9 +4237,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1972808980}
-        m_TargetAssemblyTypeName: UI.RobotMenuManager, Assembly-CSharp
+      - m_Target: {fileID: 773788678}
+        m_TargetAssemblyTypeName: RobotMenuManager, Assembly-CSharp
         m_MethodName: OpenEditor
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 251130557}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: HandleEditorOpened
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -15623,7 +15713,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 23.15
+  m_fontSize: 51.6
   m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -15759,7 +15849,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22.1
+  m_fontSize: 50.55
   m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -16035,7 +16125,7 @@ GameObject:
   - component: {fileID: 1515930808}
   - component: {fileID: 1515930807}
   m_Layer: 5
-  m_Name: ButtonFAQ
+  m_Name: Button3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16105,8 +16195,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1972808979}
-        m_TargetAssemblyTypeName: UI.GuideManager, Assembly-CSharp
+      - m_Target: {fileID: 773788679}
+        m_TargetAssemblyTypeName: GuideManager, Assembly-CSharp
         m_MethodName: OpenGuidePage
         m_Mode: 5
         m_Arguments:
@@ -16239,7 +16329,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 23.8
+  m_fontSize: 56
   m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -16932,7 +17022,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18
+  m_fontSize: 28
   m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -17067,8 +17157,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1972808980}
-        m_TargetAssemblyTypeName: UI.RobotMenuManager, Assembly-CSharp
+      - m_Target: {fileID: 773788678}
+        m_TargetAssemblyTypeName: RobotMenuManager, Assembly-CSharp
         m_MethodName: PauseUnpauseRobot
         m_Mode: 1
         m_Arguments:
@@ -17360,10 +17450,22 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1972808979}
-        m_TargetAssemblyTypeName: UI.GuideManager, Assembly-CSharp
+      - m_Target: {fileID: 773788679}
+        m_TargetAssemblyTypeName: GuideManager, Assembly-CSharp
         m_MethodName: OpenGuidePage
         m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 251130557}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: HandleGuideOpened
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -17602,7 +17704,7 @@ GameObject:
   - component: {fileID: 1952340333}
   - component: {fileID: 1952340332}
   m_Layer: 5
-  m_Name: ButtonBasics
+  m_Name: Button1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17672,8 +17774,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1972808979}
-        m_TargetAssemblyTypeName: UI.GuideManager, Assembly-CSharp
+      - m_Target: {fileID: 773788679}
+        m_TargetAssemblyTypeName: GuideManager, Assembly-CSharp
         m_MethodName: OpenGuidePage
         m_Mode: 5
         m_Arguments:
@@ -17805,7 +17907,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 773788676}
         m_TargetAssemblyTypeName: CodeEditorManager, Assembly-CSharp
         m_MethodName: 
         m_Mode: 1
@@ -17868,11 +17970,8 @@ GameObject:
   - component: {fileID: 1972808974}
   - component: {fileID: 1972808973}
   - component: {fileID: 1972808978}
-  - component: {fileID: 1972808981}
-  - component: {fileID: 1972808980}
-  - component: {fileID: 1972808979}
   m_Layer: 5
-  m_Name: UIManager
+  m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17987,50 +18086,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1972808979
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1972808972}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff9dffcf13094572bf14ab27240041f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  guideText: {fileID: 719077825}
-  guidePanel: {fileID: 1178907859}
---- !u!114 &1972808980
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1972808972}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f813311c116fb5142befc151ffb17c6f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stopResumeText: {fileID: 1486032950}
-  pauseUnpauseText: {fileID: 1597020260}
-  robotMenu: {fileID: 1835817310}
---- !u!114 &1972808981
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1972808972}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c5951ba60c59a94dab2354b5431d5db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  codeText: {fileID: 645089357}
-  codeEditor: {fileID: 1876075609}
-  selectedRobot: {fileID: 0}
 --- !u!1 &2041271935
 GameObject:
   m_ObjectHideFlags: 0
@@ -18114,8 +18169,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1972808979}
-        m_TargetAssemblyTypeName: UI.GuideManager, Assembly-CSharp
+      - m_Target: {fileID: 773788679}
+        m_TargetAssemblyTypeName: GuideManager, Assembly-CSharp
         m_MethodName: CloseGuide
         m_Mode: 1
         m_Arguments:
@@ -18248,7 +18303,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 19.65
+  m_fontSize: 42.8
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -18687,6 +18742,7 @@ SceneRoots:
   - {fileID: 509450579}
   - {fileID: 985360868}
   - {fileID: 407659860}
+  - {fileID: 773788677}
   - {fileID: 251130556}
   - {fileID: 1686520662}
   - {fileID: 1258338027}
