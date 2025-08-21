@@ -18,11 +18,6 @@ namespace UI
         void Awake()
         {
             codeEditor.gameObject.SetActive(false);
-            if (!Directory.Exists(Application.dataPath + "/Saves"))
-            {
-                Directory.CreateDirectory(Application.dataPath + "/Saves");
-            }
-
             gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         }
 

@@ -15,25 +15,34 @@ public class GameManager : MonoBehaviour
     
 	void Awake()
 	{
-        saveManager = GameObject.Find("GameManager").GetComponent<SaveManager>();
-        gameContext = GameObject.Find("GameContext").GetComponent<GameContext>();
+        saveManager = GameObject.Find("SaveManager").GetComponent<SaveManager>();
+        
+        GameObject gameContextObj = GameObject.Find("GameContext");
+        if (gameContextObj != null)
+            gameContext = gameContextObj.GetComponent<GameContext>();
+        else
+            gameContext = null;
 	}
  
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if (gameContext == null)
+        {
+            Debug.LogWarning("GameContext not found. Loading MainMenu scene.");
+            SceneManager.LoadScene("MainMenu");
+            return;
+        }
         Debug.Log($"Loading {gameContext.gameName}. New Game: {gameContext.isNewGame}");
         if (gameContext.isNewGame)
         {
             saveManager.CreateGame(gameContext.gameName);
         }
-        if (String.IsNullOrEmpty(gameContext.gameName) && Application.isEditor) // TODO: For testing without menu
-            gameContext.gameName = "testsave1";
         if (!gameContext.isNewGame)
         {
             saveManager.LoadGame(gameContext.gameName);
         }
-        moneyText.text = $"Net Gain: 0$";
+        moneyText.text = $"Net Gain: 0$"; // TODO: This should be done in LoadGame?
     }
 
     public void ItemExited(Item item)

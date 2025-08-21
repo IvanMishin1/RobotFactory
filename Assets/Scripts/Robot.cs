@@ -56,7 +56,7 @@ public class Robot : MonoBehaviour
     
     async void Update()
     {
-        if (busy || Stop)
+        if (busy || Stop || Time.timeScale == 0f)
             return;
         busy = true;
         try

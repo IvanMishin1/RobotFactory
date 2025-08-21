@@ -14,12 +14,12 @@ namespace UI
         private Camera mainCamera;
         private GameManager gameManager;
 
-        void Start()
+        void Awake()
         {
-            codeEditorManager = GetComponent<CodeEditorManager>();
-            gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-            mainCamera = Camera.main;
             robotMenu.SetActive(false);
+            gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+            codeEditorManager = GetComponent<CodeEditorManager>();
+            mainCamera = Camera.main;
         }
 
         void Update()

@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 namespace UI
 {
-    public class MainMenuManager : MonoBehaviour
+    public class LoadSaveMenuManager : MonoBehaviour
     {
         public GameObject newGameMenu, loadGameMenu;
 

@@ -13,7 +13,7 @@ namespace UI
         private string currentPage = "coding";
         private GameManager gameManager;
 
-        public void Start()
+        public void Awake()
         {
             guidePanel.SetActive(false);
             gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();

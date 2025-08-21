@@ -7,6 +7,7 @@ using System.Text.Json;
 public class SaveManager : MonoBehaviour
 {
     private RobotManager robotManager;
+    private GameContext gameContext;
     
     [Serializable]
     public class RobotData
@@ -34,12 +35,17 @@ public class SaveManager : MonoBehaviour
     public void Awake()
     {
         robotManager = GameObject.Find("RobotManager").GetComponent<RobotManager>();
+        gameContext = GameObject.Find("GameContext").GetComponent<GameContext>();
     }
     
-    public void SaveGame(string gameName)
+    public void SaveGame(string gameName = null)
     {
         if (string.IsNullOrWhiteSpace(gameName))
-            throw new ArgumentException("gameName cannot be null, empty, or whitespace.", nameof(gameName));
+        {
+            gameName = gameContext.gameName;
+            if (string.IsNullOrEmpty(gameName))
+                throw new ArgumentException("gameName cannot be null, empty, or whitespace.", nameof(gameName));
+        }
         
         GameObject[] robots = GameObject.FindGameObjectsWithTag("Robot");
         List<RobotData> robotsData = new List<RobotData>();
