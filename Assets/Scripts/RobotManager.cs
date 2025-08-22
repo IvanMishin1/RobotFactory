@@ -12,7 +12,7 @@ public class RobotManager : MonoBehaviour
         if (robotPrefab == null)
             Debug.LogError("Robot prefab not found in Resources/Prefabs/Robot");
     }
-    public GameObject CreateRobot(Vector2 position, string robotName = null)
+    public Robot CreateRobot(Vector2 position, string robotName = null)
     {
         GameObject robot = Instantiate(robotPrefab, position, Quaternion.identity);
         if (String.IsNullOrEmpty(robotName))
@@ -21,7 +21,7 @@ public class RobotManager : MonoBehaviour
             robot.name = robotName;
         robot.transform.position = position;
         robot.transform.parent = transform;
-        return robot;
+        return robot.GetComponent<Robot>();
     }
     public void DestroyRobot(Robot robot)
     {

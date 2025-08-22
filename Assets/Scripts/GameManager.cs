@@ -7,9 +7,6 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    float money = 0f;
-    public TMP_Text moneyText;
-    
     private GameContext gameContext;
     private SaveManager saveManager;
     
@@ -42,17 +39,5 @@ public class GameManager : MonoBehaviour
         {
             saveManager.LoadGame(gameContext.gameName);
         }
-        moneyText.text = $"Net Gain: 0$"; // TODO: This should be done in LoadGame?
-    }
-
-    public void ItemExited(Item item)
-    {
-        money += item.itemType switch
-        {
-            "ore" => 1f,
-            "ingot" => 2f,
-            _ => 0f
-        };
-        moneyText.text = $"Net Gain: {money}$";
     }
 }

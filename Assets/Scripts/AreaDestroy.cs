@@ -3,8 +3,11 @@ using UnityEngine;
 public class AreaDestroy : MonoBehaviour
 {
     private GameManager gameManager;
-    private void Start()
+    private MoneyManager moneyManager;
+    
+    void Awake()
     {
+        moneyManager = GameObject.Find("MoneyManager").GetComponent<MoneyManager>();
         gameManager = Object.FindFirstObjectByType<GameManager>();
     }
     
@@ -15,9 +18,19 @@ public class AreaDestroy : MonoBehaviour
             Item item = other.GetComponent<Item>();
             if (item != null && !item.transform.parent.CompareTag("Robot") && item.transform.parent != transform)
             {
-                gameManager.ItemExited(item);
+                ItemExited(item);
                 Destroy(other.gameObject);
             }
         }
+    }
+    
+    public void ItemExited(Item item)
+    {
+        moneyManager.AddMoney((item.itemType switch
+        {
+            "ore" => 1,
+            "ingot" => 2,
+            _ => 0
+        }));
     }
 }

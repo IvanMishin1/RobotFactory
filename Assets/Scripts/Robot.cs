@@ -30,13 +30,15 @@ public class Robot : MonoBehaviour
 	public Vector2 startingPosition;
     
     public Item pickedUpItem = null;
-    
-    void Start()
+
+    void Awake()
     {
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         statusSpriteRenderer = transform.Find("Status").GetComponent<SpriteRenderer>();
-
+    }
+    void Start()
+    {
         state = LuaState.Create();
         
         Command.Register("up", state, this, new MoveCommands(Vector2.up));
