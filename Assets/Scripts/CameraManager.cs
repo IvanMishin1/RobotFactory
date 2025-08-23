@@ -1,16 +1,53 @@
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Rendering.Universal;
 
 public class CameraManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [Serializable]
+    public class CameraSize
     {
-        
+        public int width;
+        public int height;
+        public CameraSize(int width, int height)
+        {
+            this.width = width;
+            this.height = height;
+        }
     }
 
-    // Update is called once per frame
+    private PixelPerfectCamera pixelPerfectCamera;
+    private CameraInputActions input;
+    public CameraSize cameraSize;
+    public float moveSpeed = 5f;
+    public float zoomSpeed = 200f;
+
+    void Awake()
+    {
+        pixelPerfectCamera = Camera.main.GetComponent<PixelPerfectCamera>();
+        input = new CameraInputActions();
+    }
+
+    void OnEnable() => input.Enable();
+    void OnDisable() => input.Disable();
+
     void Update()
     {
-        
+        Vector2 move = input.Player.Move.ReadValue<Vector2>();
+        if (move.sqrMagnitude > 0f)
+            pixelPerfectCamera.transform.position += new Vector3(move.x, move.y, 0f) * moveSpeed * Time.deltaTime;
+
+        float zoomAxis = input.Player.Zoom.ReadValue<float>();
+        if (Mathf.Abs(zoomAxis) > 0.0001f)
+        {
+            cameraSize.height -= (int)(zoomAxis * zoomSpeed * Time.unscaledDeltaTime);
+        }
+
+        cameraSize.height &= ~1;
+        cameraSize.width = ((int)(cameraSize.height * (16f / 9f))) & ~1;
+
+        pixelPerfectCamera.refResolutionX = cameraSize.width;
+        pixelPerfectCamera.refResolutionY = cameraSize.height;
     }
 }
