@@ -7,6 +7,7 @@ using System.Text.Json;
 public class SaveManager : MonoBehaviour
 {
     private RobotManager robotManager;
+    private ItemManager itemManager;
     private GameContext gameContext;
     private WallManager wallManager;
     private MoneyManager moneyManager;
@@ -29,6 +30,26 @@ public class SaveManager : MonoBehaviour
             this.y = position.y;
             this.paused = paused;
             this.stopped = stopped;
+        }
+    }
+    
+    public class ItemData
+    {
+        public string name;
+        public string type;
+        public float x;
+        public float y;
+        public string robot;
+        
+        public ItemData() {}
+        
+        public void SetValues(string name, string type, Vector2 position, string robot = null)
+        {
+            this.name = name;
+            this.type = type;
+            this.robot = robot;
+            this.x = position.x;
+            this.y = position.y;
         }
     }
 
@@ -57,10 +78,10 @@ public class SaveManager : MonoBehaviour
             public int height;
         }
     }
-
     public void Awake()
     {
         robotManager = GameObject.Find("RobotManager").GetComponent<RobotManager>();
+        itemManager = GameObject.Find("ItemManager").GetComponent<ItemManager>();
         gameContext = GameObject.Find("GameContext").GetComponent<GameContext>();
         wallManager = GameObject.Find("WallManager").GetComponent<WallManager>();
         moneyManager = GameObject.Find("MoneyManager").GetComponent<MoneyManager>();
@@ -80,7 +101,6 @@ public class SaveManager : MonoBehaviour
         // Save robots
         GameObject[] robots = GameObject.FindGameObjectsWithTag("Robot");
         List<RobotData> robotsData = new List<RobotData>();
-        
         foreach (GameObject robotObject in robots)
         {
             Robot robotComponent = robotObject.GetComponent<Robot>();
@@ -100,6 +120,27 @@ public class SaveManager : MonoBehaviour
         string robotsPath = Application.dataPath + "/Saves/" + gameName + "/robots.json";
         File.WriteAllText(robotsPath, robotsJson);
         
+        // Save items
+        GameObject[] items = GameObject.FindGameObjectsWithTag("Item");
+        List<ItemData> itemsData = new List<ItemData>();
+        foreach (GameObject itemObject in items)
+        {
+            Item itemComponent = itemObject.GetComponent<Item>();
+            if (itemComponent != null)
+            {
+                ItemData itemData = new ItemData();
+                itemData.SetValues(
+                    itemComponent.name,
+                    itemComponent.type,
+                    itemComponent.pickedUpPosition
+                );
+                itemsData.Add(itemData);
+            }
+        }
+        string itemsJson = JsonSerializer.Serialize(itemsData, new JsonSerializerOptions { WriteIndented = true, IncludeFields = true });
+        string itemsPath = Application.dataPath + "/Saves/" + gameName + "/items.json";
+        File.WriteAllText(itemsPath, itemsJson);
+        
         // Save SaveInfo
         SaveInfoData saveInfoData = new SaveInfoData();
         saveInfoData.SetValues(moneyManager.Money, wallManager.wallRect);
@@ -109,10 +150,7 @@ public class SaveManager : MonoBehaviour
         
         // Save Lua scripts
         foreach (var file in new DirectoryInfo(Application.dataPath + "/Saves/Temp").GetFiles("*.lua"))
-        {
-            string destPath = Application.dataPath + "/Saves/" + gameName + "/" + file.Name;
-            file.CopyTo(destPath, true);        
-        }
+            file.CopyTo(Application.dataPath + "/Saves/" + gameName + "/" + file.Name, true);        
 	}
 
     public void LoadGame(string gameName)
@@ -129,9 +167,8 @@ public class SaveManager : MonoBehaviour
             Directory.CreateDirectory(Application.dataPath + "/Saves/" + gameName);
         
         // Load robots
-        string robotsJson = File.ReadAllText(Application.dataPath + "/Saves/"+ gameName +"/robots.json");
+        string robotsJson = File.ReadAllText(Application.dataPath + "/Saves/"+ gameName +"/robots.json"); // TODO: Handle file not found
         List<RobotData> robotsData = JsonSerializer.Deserialize<List<RobotData>>(robotsJson, new JsonSerializerOptions { IncludeFields = true });
-        
         robotManager.DestroyAllRobots();
         foreach (var robot in robotsData)
         {
@@ -140,8 +177,15 @@ public class SaveManager : MonoBehaviour
             robotComponent.Stop = robot.stopped;
         }
         
+        // Load items
+        string itemsJson = File.ReadAllText(Application.dataPath + "/Saves/"+ gameName +"/items.json"); // TODO: Handle file not found
+        List<ItemData> itemsData = JsonSerializer.Deserialize<List<ItemData>>(itemsJson, new JsonSerializerOptions { IncludeFields = true });
+        itemManager.DestroyAllItems();
+        foreach (var item in itemsData)
+            itemManager.CreateItem(new Vector2(item.x, item.y), item.type, item.name);
+
         // Load SaveInfo
-        string saveInfoJson = File.ReadAllText(Application.dataPath + "/Saves/"+ gameName +"/saveinfo.json");
+        string saveInfoJson = File.ReadAllText(Application.dataPath + "/Saves/"+ gameName +"/saveinfo.json"); // TODO: Handle file not found
         SaveInfoData saveInfoData = JsonSerializer.Deserialize<SaveInfoData>(saveInfoJson, new JsonSerializerOptions { IncludeFields = true });
         moneyManager.Money = saveInfoData.money;
         wallManager.wallRect = new RectInt(
@@ -153,13 +197,11 @@ public class SaveManager : MonoBehaviour
         
         // Load Lua scripts
         foreach (var file in new DirectoryInfo(Application.dataPath + "/Saves/Temp").GetFiles("*"))
-        {
             file.Delete();
-        }
         foreach (var file in new DirectoryInfo(Application.dataPath + "/Saves/" + gameName).GetFiles("*.lua"))
-        {
             file.CopyTo(Application.dataPath + "/Saves/Temp/" + file.Name, true);
-        }
+        
+        Time.timeScale = 1f;
     }
     
     public void CreateGame(string gameName)
@@ -170,6 +212,7 @@ public class SaveManager : MonoBehaviour
         Directory.CreateDirectory(Application.dataPath + "/Saves/" + gameName);
         File.WriteAllText(Application.dataPath + "/Saves/" + gameName + "/robots.json", "[]");
         File.WriteAllText(Application.dataPath + "/Saves/" + gameName + "/saveinfo.json", "[]");
+        File.WriteAllText(Application.dataPath + "/Saves/" + gameName + "/items.json", "[]");
         robotManager.CreateRobot(new Vector2(0, 0));
         
         var wallManager = GameObject.Find("WallManager").GetComponent<WallManager>();

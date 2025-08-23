@@ -1,11 +1,18 @@
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Machine : MonoBehaviour
 {
     public string role;
     public AudioSource audioSource;
     public AudioClip[] clips;
-    public GameObject itemsContainer;
+    private GameObject itemsContainer;
+
+    void Awake()
+    {
+        itemsContainer = GameObject.Find("ItemsContainer");
+    }
 
     // Update is called once per frame
     void Update()
@@ -23,9 +30,9 @@ public class Machine : MonoBehaviour
                         Item item = child.GetComponent<Item>();
                         if (!item.hasBeenProcessed)
                         {
-                            if (item.itemType == "ore")
+                            if (item.type == "ore")
                                 item.SetItemType("ingot");
-                            else if (item.itemType == "ingot")
+                            else if (item.type == "ingot")
                                 item.SetItemType("ore");
             
                             item.hasBeenProcessed = true;
@@ -54,6 +61,7 @@ public class Machine : MonoBehaviour
                 if (item != null && !item.transform.parent.CompareTag("Robot") && item.transform.parent != itemsContainer.transform)
                 {
                     item.transform.SetParent(itemsContainer.transform);
+                    item.pickedUpPosition = item.transform.position;
                 }
             }
         }
@@ -68,10 +76,11 @@ public class Machine : MonoBehaviour
                 Item item = other.GetComponent<Item>();
                 if (item != null)
                 {
-                    item.transform.parent = GameObject.Find("Items").transform;
+                    item.transform.parent = GameObject.Find("ItemManager").transform;
                     Rigidbody2D rb = other.GetComponent<Rigidbody2D>();
                     rb.linearVelocity = Vector2.zero;
                     item.hasBeenProcessed = false;
+                    item.pickedUpPosition = item.transform.position;
                 }
             }
         }

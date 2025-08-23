@@ -26,7 +26,7 @@ public class AreaDestroy : MonoBehaviour
     
     public void ItemExited(Item item)
     {
-        moneyManager.AddMoney((item.itemType switch
+        moneyManager.AddMoney((item.type switch
         {
             "ore" => 1,
             "ingot" => 2,

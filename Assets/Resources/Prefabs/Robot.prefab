@@ -192,12 +192,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 0.5
   busy: 0
-  stop: 0
-  pause: 0
   animator: {fileID: 0}
   facingDirection: -1
   spriteRenderer: {fileID: 0}
   statusSpriteRenderer: {fileID: 0}
+  startingPosition: {x: 0, y: 0}
   pickedUpItem: {fileID: 0}
 --- !u!95 &6124540728044775678
 Animator:

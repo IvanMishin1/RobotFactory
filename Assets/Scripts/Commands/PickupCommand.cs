@@ -15,7 +15,7 @@ namespace Commands
             if (Physics2D.OverlapCircle(robot.transform.position, 0.5f, LayerMask.GetMask("Items")) is Collider2D itemCollider)
             {
                 Item item = itemCollider.GetComponent<Item>();
-                if (!String.IsNullOrEmpty(itemType) && item.itemType != itemType && !item.transform.parent.CompareTag("Machine"))
+                if (!String.IsNullOrEmpty(itemType) && item.type != itemType && !item.transform.parent.CompareTag("Machine"))
                 {
                     return new ValueTask<int>(1);
                 }
@@ -24,6 +24,7 @@ namespace Commands
                     robot.pickedUpItem = item;
                     robot.pickedUpItem.transform.SetParent(robot.transform);
                     robot.pickedUpItem.transform.position = robot.transform.position;
+                    item.pickedUpPosition = item.transform.position;
                 }
             }
             return new ValueTask<int>(0);

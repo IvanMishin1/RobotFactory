@@ -15,16 +15,16 @@ public class AreaSpawn : MonoBehaviour
     
     public List<Quantity> output;
     private GameObject itemPrefab;
-    private Transform itemsParent;
     private Bounds areaBounds;
     private TimeManager timeManager;
     private int currentDay;
+    private ItemManager itemManager;
     
 
     void Start()
     {
         timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
-        itemsParent = GameObject.Find("Items").transform;
+        itemManager = GameObject.Find("ItemManager").GetComponent<ItemManager>();
         itemPrefab = Resources.Load<GameObject>("Prefabs/Item");
         CalculateSpawnTimes();
         CalculateAreaBounds();
@@ -65,8 +65,7 @@ public class AreaSpawn : MonoBehaviour
                                                 UnityEngine.Random.Range(areaBounds.min.y, areaBounds.max.y), 
                                                 transform.position.z);
     
-            GameObject item = Instantiate(itemPrefab, spawnPosition, Quaternion.identity, itemsParent);
-            item.GetComponent<Item>().SetItemType(itemType);
+            itemManager.CreateItem(spawnPosition, itemType, null);
         }
     }
 

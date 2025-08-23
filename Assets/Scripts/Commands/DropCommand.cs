@@ -8,7 +8,8 @@ namespace Commands
     {
         protected override ValueTask<int> ExecuteCommand(Robot robot, LuaFunctionExecutionContext context)
         {
-            robot.pickedUpItem.transform.SetParent(GameObject.Find("Items").transform);
+            robot.pickedUpItem.pickedUpPosition = robot.transform.position;
+            robot.pickedUpItem.transform.SetParent(GameObject.Find("ItemManager").transform);
             robot.pickedUpItem = null;
             return new ValueTask<int>(0);
         }

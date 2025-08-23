@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 
 public class CameraManager : MonoBehaviour
@@ -27,17 +26,24 @@ public class CameraManager : MonoBehaviour
     {
         pixelPerfectCamera = Camera.main.GetComponent<PixelPerfectCamera>();
         input = new CameraInputActions();
+        input.Enable();
     }
 
-    void OnEnable() => input.Enable();
-    void OnDisable() => input.Disable();
+    void OnEnable()
+    {
+        input.Enable();
+    }
+
+    void OnDisable()
+    {
+        input.Disable();
+    }
 
     void Update()
     {
-        
         Vector2 move = input.Player.Move.ReadValue<Vector2>();
         if (move.sqrMagnitude > 0f)
-            pixelPerfectCamera.transform.position += new Vector3(move.x, move.y, 0f) * moveSpeed * Time.deltaTime;
+            pixelPerfectCamera.transform.position += new Vector3(move.x, move.y, 0f) * moveSpeed * Time.unscaledDeltaTime;
 
         float zoomAxis = input.Player.Zoom.ReadValue<float>();
         if (Mathf.Abs(zoomAxis) > 0.0001f)

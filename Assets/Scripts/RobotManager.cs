@@ -27,7 +27,7 @@ public class RobotManager : MonoBehaviour
     {
         if (robot != null)
         {
-            Destroy(robot);
+            Destroy(robot.gameObject);
         }
     }
     public void DestroyAllRobots()

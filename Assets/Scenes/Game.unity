@@ -203,7 +203,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28.65
+  m_fontSize: 29.75
   m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -958,7 +958,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 21.8
+  m_fontSize: 22.6
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1977,7 +1977,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 21.8
+  m_fontSize: 22.6
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2193,7 +2193,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 21.8
+  m_fontSize: 22.6
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2254,8 +2254,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 407659860}
+  - component: {fileID: 407659861}
   m_Layer: 7
-  m_Name: Items
+  m_Name: ItemManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2276,6 +2277,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &407659861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 407659859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bb7ee687d113e402b520530fede9197, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &440647617
 GameObject:
   m_ObjectHideFlags: 0
@@ -2549,7 +2562,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28.65
+  m_fontSize: 29.75
   m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3431,9 +3444,9 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.08600183
+    x: 0.07502287
     y: 0
-    width: 0.82872826
+    width: 0.85050315
     height: 0.99999994
   near clip plane: 0.3
   far clip plane: 1000
@@ -5320,7 +5333,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 21.8
+  m_fontSize: 22.6
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -6661,7 +6674,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: ed8f6f36d06b0fa4fa05acf735a5d817, type: 3}
   - {fileID: 8300000, guid: 8a31c1c89dda21b4bb7ed7fc7f87fde7, type: 3}
   - {fileID: 8300000, guid: 70558a4bf80733d438ffe69e55e3b3c3, type: 3}
-  itemsContainer: {fileID: 922214589}
 --- !u!1 &1168880070
 GameObject:
   m_ObjectHideFlags: 0
@@ -18652,7 +18664,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28.65
+  m_fontSize: 29.75
   m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -19088,7 +19100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   output:
   - itemType: ore
-    amount: 32
+    amount: 64
 --- !u!61 &1605432869
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -19276,7 +19288,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 21.8
+  m_fontSize: 22.6
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -20633,7 +20645,6 @@ MonoBehaviour:
   role: in
   audioSource: {fileID: 0}
   clips: []
-  itemsContainer: {fileID: 922214589}
 --- !u!1 &1952340330
 GameObject:
   m_ObjectHideFlags: 0
@@ -21459,7 +21470,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20.7
+  m_fontSize: 21.35
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -21961,7 +21972,6 @@ MonoBehaviour:
   role: out
   audioSource: {fileID: 0}
   clips: []
-  itemsContainer: {fileID: 922214589}
 --- !u!1 &2145621599
 GameObject:
   m_ObjectHideFlags: 0
