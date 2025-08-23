@@ -18,7 +18,7 @@ public class CameraManager : MonoBehaviour
     }
 
     private PixelPerfectCamera pixelPerfectCamera;
-    private CameraInputActions input;
+    [NonSerialized] public CameraInputActions input;
     public CameraSize cameraSize;
     public float moveSpeed = 5f;
     public float zoomSpeed = 200f;
@@ -34,6 +34,7 @@ public class CameraManager : MonoBehaviour
 
     void Update()
     {
+        
         Vector2 move = input.Player.Move.ReadValue<Vector2>();
         if (move.sqrMagnitude > 0f)
             pixelPerfectCamera.transform.position += new Vector3(move.x, move.y, 0f) * moveSpeed * Time.deltaTime;
@@ -49,5 +50,15 @@ public class CameraManager : MonoBehaviour
 
         pixelPerfectCamera.refResolutionX = cameraSize.width;
         pixelPerfectCamera.refResolutionY = cameraSize.height;
+    }
+
+    public void EnableMovement()
+    {
+        input.Enable();
+    }
+
+    public void DisableMovement()
+    {
+        input.Disable();
     }
 }
