@@ -106,12 +106,27 @@ public class SaveManager : MonoBehaviour
         string saveInfoJson = JsonSerializer.Serialize(saveInfoData, new JsonSerializerOptions { WriteIndented = true, IncludeFields = true });
         string saveInfoPath = Application.dataPath + "/Saves/" + gameName + "/saveinfo.json";
         File.WriteAllText(saveInfoPath, saveInfoJson);
+        
+        // Save Lua scripts
+        foreach (var file in new DirectoryInfo(Application.dataPath + "/Saves/Temp").GetFiles("*.lua"))
+        {
+            string destPath = Application.dataPath + "/Saves/" + gameName + "/" + file.Name;
+            file.CopyTo(destPath, true);        
+        }
 	}
 
     public void LoadGame(string gameName)
     {
         if (string.IsNullOrWhiteSpace(gameName))
             throw new ArgumentException("gameName cannot be null, empty, or whitespace.", nameof(gameName));
+        
+        // Creating missing directories
+        if (!Directory.Exists(Application.dataPath + "/Saves"))
+            Directory.CreateDirectory(Application.dataPath + "/Saves");
+        if (!Directory.Exists(Application.dataPath + "/Saves/Temp"))
+            Directory.CreateDirectory(Application.dataPath + "/Saves/Temp");
+        if (!Directory.Exists(Application.dataPath + "/Saves/" + gameName))
+            Directory.CreateDirectory(Application.dataPath + "/Saves/" + gameName);
         
         // Load robots
         string robotsJson = File.ReadAllText(Application.dataPath + "/Saves/"+ gameName +"/robots.json");
@@ -135,6 +150,16 @@ public class SaveManager : MonoBehaviour
             saveInfoData.wallRect.width,
             saveInfoData.wallRect.height
         );
+        
+        // Load Lua scripts
+        foreach (var file in new DirectoryInfo(Application.dataPath + "/Saves/Temp").GetFiles("*"))
+        {
+            file.Delete();
+        }
+        foreach (var file in new DirectoryInfo(Application.dataPath + "/Saves/" + gameName).GetFiles("*.lua"))
+        {
+            file.CopyTo(Application.dataPath + "/Saves/Temp/" + file.Name, true);
+        }
     }
     
     public void CreateGame(string gameName)

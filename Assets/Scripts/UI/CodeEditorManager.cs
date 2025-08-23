@@ -56,7 +56,7 @@ namespace UI
 
         private string LoadCode(string title)
         {
-            string path = Application.dataPath + "/Saves/" + title + ".lua";
+            string path = Application.dataPath + "/Saves/Temp/" + title + ".lua";
             if (File.Exists(path))
             {
                 return File.ReadAllText(path);
@@ -68,7 +68,7 @@ namespace UI
 
         private void SaveCode()
         {
-            string path = Application.dataPath + "/Saves/" + selectedRobot.gameObject.name + ".lua";
+            string path = Application.dataPath + "/Saves/Temp/" + selectedRobot.gameObject.name + ".lua";
             File.WriteAllText(path, codeText.text);
         }
     }

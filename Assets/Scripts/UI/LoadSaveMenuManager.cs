@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -74,6 +75,7 @@ namespace UI
 
             return Directory.EnumerateDirectories(Application.dataPath + "/Saves/", "*", SearchOption.TopDirectoryOnly)
                 .Select(Path.GetFileName)
+                .Where(name => !string.Equals(name, "Temp", StringComparison.OrdinalIgnoreCase))
                 .ToList();
         }
     }
