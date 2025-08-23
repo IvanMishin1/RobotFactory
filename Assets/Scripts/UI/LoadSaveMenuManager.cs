@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
@@ -14,6 +15,7 @@ namespace UI
 
         public TMP_InputField createGameNameInput;
         public TMP_Dropdown loadGameDropdown;
+        public TMP_Text errorText;
         private GameContext gameContext;
 
         public void Awake()
@@ -39,15 +41,22 @@ namespace UI
             string gameName = createGameNameInput.text.Trim();
             if (string.IsNullOrEmpty(gameName))
             {
-                Debug.LogWarning("Game name cannot be empty.");
+                errorText.text = "Game name cannot be empty.";
                 return;
             }
 
             if (GetGameNames().Contains(gameName))
             {
-                Debug.LogWarning("Game name already exists. Please choose a different name.");
+                errorText.text = "Game name already exists. Please choose a different name.";
                 return;
             }
+            
+            if (!Regex.IsMatch(gameName, @"^[a-zA-Z0-9 ]+$"))
+            {
+                errorText.text = "Game name may contain only letters, digits, and spaces.";
+                return;
+            }
+            
             gameContext.gameName = gameName;
             gameContext.isNewGame = true;
             SceneManager.LoadScene("Game");
