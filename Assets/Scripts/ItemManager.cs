@@ -23,7 +23,6 @@ public class ItemManager : MonoBehaviour
         //item.transform.position = position;
         Item itemComponent = item.GetComponent<Item>();
         itemComponent.SetItemType(itemType);
-        itemComponent.pickedUpPosition = position;
         return itemComponent;
     }
 

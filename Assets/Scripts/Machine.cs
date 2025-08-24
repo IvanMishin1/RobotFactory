@@ -61,7 +61,6 @@ public class Machine : MonoBehaviour
                 if (item != null && !item.transform.parent.CompareTag("Robot") && item.transform.parent != itemsContainer.transform)
                 {
                     item.transform.SetParent(itemsContainer.transform);
-                    item.pickedUpPosition = item.transform.position;
                 }
             }
         }
@@ -80,7 +79,6 @@ public class Machine : MonoBehaviour
                     Rigidbody2D rb = other.GetComponent<Rigidbody2D>();
                     rb.linearVelocity = Vector2.zero;
                     item.hasBeenProcessed = false;
-                    item.pickedUpPosition = item.transform.position;
                 }
             }
         }

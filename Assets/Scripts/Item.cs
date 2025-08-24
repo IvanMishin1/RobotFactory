@@ -6,7 +6,6 @@ public class Item : MonoBehaviour
     public SpriteRenderer spriteRenderer;
     public string[] itemTypes = { "ore", "ingot", "wood" };
     public bool hasBeenProcessed = false;
-    public Vector2 pickedUpPosition;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()

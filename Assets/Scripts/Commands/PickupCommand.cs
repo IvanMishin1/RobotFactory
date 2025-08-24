@@ -24,7 +24,6 @@ namespace Commands
                     robot.pickedUpItem = item;
                     robot.pickedUpItem.transform.SetParent(robot.transform);
                     robot.pickedUpItem.transform.position = robot.transform.position;
-                    item.pickedUpPosition = item.transform.position;
                 }
             }
             return new ValueTask<int>(0);

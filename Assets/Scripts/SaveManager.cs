@@ -7,7 +7,6 @@ using System.Text.Json;
 public class SaveManager : MonoBehaviour
 {
     private RobotManager robotManager;
-    private ItemManager itemManager;
     private GameContext gameContext;
     private WallManager wallManager;
     private MoneyManager moneyManager;
@@ -81,7 +80,6 @@ public class SaveManager : MonoBehaviour
     public void Awake()
     {
         robotManager = GameObject.Find("RobotManager").GetComponent<RobotManager>();
-        itemManager = GameObject.Find("ItemManager").GetComponent<ItemManager>();
         gameContext = GameObject.Find("GameContext").GetComponent<GameContext>();
         wallManager = GameObject.Find("WallManager").GetComponent<WallManager>();
         moneyManager = GameObject.Find("MoneyManager").GetComponent<MoneyManager>();
@@ -120,27 +118,6 @@ public class SaveManager : MonoBehaviour
         string robotsPath = Application.dataPath + "/Saves/" + gameName + "/robots.json";
         File.WriteAllText(robotsPath, robotsJson);
         
-        // Save items
-        GameObject[] items = GameObject.FindGameObjectsWithTag("Item");
-        List<ItemData> itemsData = new List<ItemData>();
-        foreach (GameObject itemObject in items)
-        {
-            Item itemComponent = itemObject.GetComponent<Item>();
-            if (itemComponent != null)
-            {
-                ItemData itemData = new ItemData();
-                itemData.SetValues(
-                    itemComponent.name,
-                    itemComponent.type,
-                    itemComponent.pickedUpPosition
-                );
-                itemsData.Add(itemData);
-            }
-        }
-        string itemsJson = JsonSerializer.Serialize(itemsData, new JsonSerializerOptions { WriteIndented = true, IncludeFields = true });
-        string itemsPath = Application.dataPath + "/Saves/" + gameName + "/items.json";
-        File.WriteAllText(itemsPath, itemsJson);
-        
         // Save SaveInfo
         SaveInfoData saveInfoData = new SaveInfoData();
         saveInfoData.SetValues(moneyManager.Money, wallManager.wallRect);
@@ -159,10 +136,10 @@ public class SaveManager : MonoBehaviour
             throw new ArgumentException("gameName cannot be null, empty, or whitespace.", nameof(gameName));
         
         // Creating missing directories
-        if (!Directory.Exists(Application.dataPath + "/Saves"))
-            Directory.CreateDirectory(Application.dataPath + "/Saves");
-        if (!Directory.Exists(Application.dataPath + "/Saves/Temp"))
-            Directory.CreateDirectory(Application.dataPath + "/Saves/Temp");
+        if (!Directory.Exists(Application.dataPath + "/Saves/"))
+            Directory.CreateDirectory(Application.dataPath + "/Saves/");
+        if (!Directory.Exists(Application.dataPath + "/Saves/Temp/"))
+            Directory.CreateDirectory(Application.dataPath + "/Saves/Temp/");
         if (!Directory.Exists(Application.dataPath + "/Saves/" + gameName))
             Directory.CreateDirectory(Application.dataPath + "/Saves/" + gameName);
         
@@ -176,13 +153,6 @@ public class SaveManager : MonoBehaviour
             robotComponent.Pause = robot.paused;
             robotComponent.Stop = robot.stopped;
         }
-        
-        // Load items
-        string itemsJson = File.ReadAllText(Application.dataPath + "/Saves/"+ gameName +"/items.json"); // TODO: Handle file not found
-        List<ItemData> itemsData = JsonSerializer.Deserialize<List<ItemData>>(itemsJson, new JsonSerializerOptions { IncludeFields = true });
-        itemManager.DestroyAllItems();
-        foreach (var item in itemsData)
-            itemManager.CreateItem(new Vector2(item.x, item.y), item.type, item.name);
 
         // Load SaveInfo
         string saveInfoJson = File.ReadAllText(Application.dataPath + "/Saves/"+ gameName +"/saveinfo.json"); // TODO: Handle file not found
@@ -196,7 +166,7 @@ public class SaveManager : MonoBehaviour
         );
         
         // Load Lua scripts
-        foreach (var file in new DirectoryInfo(Application.dataPath + "/Saves/Temp").GetFiles("*"))
+        foreach (var file in new DirectoryInfo(Application.dataPath + "/Saves/Temp/").GetFiles("*"))
             file.Delete();
         foreach (var file in new DirectoryInfo(Application.dataPath + "/Saves/" + gameName).GetFiles("*.lua"))
             file.CopyTo(Application.dataPath + "/Saves/Temp/" + file.Name, true);
@@ -209,10 +179,12 @@ public class SaveManager : MonoBehaviour
         if (string.IsNullOrWhiteSpace(gameName))
             throw new ArgumentException("gameName cannot be null, empty, or whitespace.", nameof(gameName));
         
+        foreach (var file in new DirectoryInfo(Application.dataPath + "/Saves/Temp/").GetFiles("*"))
+            file.Delete();
+        
         Directory.CreateDirectory(Application.dataPath + "/Saves/" + gameName);
         File.WriteAllText(Application.dataPath + "/Saves/" + gameName + "/robots.json", "[]");
         File.WriteAllText(Application.dataPath + "/Saves/" + gameName + "/saveinfo.json", "[]");
-        File.WriteAllText(Application.dataPath + "/Saves/" + gameName + "/items.json", "[]");
         robotManager.CreateRobot(new Vector2(0, 0));
         
         var wallManager = GameObject.Find("WallManager").GetComponent<WallManager>();
