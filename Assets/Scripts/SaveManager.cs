@@ -93,8 +93,12 @@ public class SaveManager : MonoBehaviour
             if (string.IsNullOrEmpty(gameName))
                 throw new ArgumentException("gameName cannot be null, empty, or whitespace.", nameof(gameName));
         }
-        if (!Directory.Exists(Application.dataPath + "/Saves/" + gameName))
-            Directory.CreateDirectory(Application.dataPath + "/Saves/" + gameName);
+        
+        // Creating missing directories
+        if (!Directory.Exists(Application.dataPath + "/Saves/"))
+            Directory.CreateDirectory(Application.dataPath + "/Saves/");
+        if (!Directory.Exists(Application.dataPath + "/Saves/Temp/"))
+            Directory.CreateDirectory(Application.dataPath + "/Saves/Temp/");
         
         // Save robots
         GameObject[] robots = GameObject.FindGameObjectsWithTag("Robot");
@@ -140,8 +144,6 @@ public class SaveManager : MonoBehaviour
             Directory.CreateDirectory(Application.dataPath + "/Saves/");
         if (!Directory.Exists(Application.dataPath + "/Saves/Temp/"))
             Directory.CreateDirectory(Application.dataPath + "/Saves/Temp/");
-        if (!Directory.Exists(Application.dataPath + "/Saves/" + gameName))
-            Directory.CreateDirectory(Application.dataPath + "/Saves/" + gameName);
         
         // Load robots
         string robotsJson = File.ReadAllText(Application.dataPath + "/Saves/"+ gameName +"/robots.json"); // TODO: Handle file not found
@@ -179,10 +181,11 @@ public class SaveManager : MonoBehaviour
         if (string.IsNullOrWhiteSpace(gameName))
             throw new ArgumentException("gameName cannot be null, empty, or whitespace.", nameof(gameName));
         
+        Directory.CreateDirectory(Application.dataPath + "/Saves/" + gameName); ;
+        if (!Directory.Exists(Application.dataPath + "/Saves/Temp/"))
+            Directory.CreateDirectory(Application.dataPath + "/Saves/Temp/");
         foreach (var file in new DirectoryInfo(Application.dataPath + "/Saves/Temp/").GetFiles("*"))
             file.Delete();
-        
-        Directory.CreateDirectory(Application.dataPath + "/Saves/" + gameName);
         File.WriteAllText(Application.dataPath + "/Saves/" + gameName + "/robots.json", "[]");
         File.WriteAllText(Application.dataPath + "/Saves/" + gameName + "/saveinfo.json", "[]");
         robotManager.CreateRobot(new Vector2(0, 0));
