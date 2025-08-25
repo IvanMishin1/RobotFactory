@@ -1,8 +1,8 @@
 {
-    "name": "CameraInputActions",
+    "name": "InputActions",
     "maps": [
         {
-            "name": "Player",
+            "name": "Camera",
             "id": "6597126f-b1d2-49f4-bc13-cb8fb3bead55",
             "actions": [
                 {
@@ -198,6 +198,56 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "Zoom",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Time",
+            "id": "5a12eaa7-26ed-468a-adae-c3d9d43d6a91",
+            "actions": [
+                {
+                    "name": "TimeScale",
+                    "type": "Value",
+                    "id": "8351c206-2549-455f-8322-2e5a896a4b43",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "905f7d23-2a7a-4b61-bfa6-2ddb55a4b8ee",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "Scale",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "TimeScale",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "abb4fd42-1190-4690-9c8a-c5937e313a4a",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "Scale(factor=2)",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "TimeScale",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "72fe7f17-d6f6-4f54-a62c-bbe037ed9aeb",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "Scale(factor=3)",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "TimeScale",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

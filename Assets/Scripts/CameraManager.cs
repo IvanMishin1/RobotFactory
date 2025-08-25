@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 
 public class CameraManager : MonoBehaviour
@@ -17,47 +18,88 @@ public class CameraManager : MonoBehaviour
     }
 
     private PixelPerfectCamera pixelPerfectCamera;
-    [NonSerialized] public CameraInputActions input;
+
+    private InputActionMap input;
+    private InputAction moveAction;
+    private InputAction zoomAction;
 
     public CameraSize cameraSize = new CameraSize(640, 360);
     public int minHeight = 120;
     public int maxHeight = 1440;
     public float moveSpeed = 5f;
-    public float zoomSpeed = 200f; // units (pixels of height) per second per axis unit
+    public float zoomSpeed = 200f; // pixels of height per second per axis unit
+    public bool matchScreenAspectOnStart = true;
 
-    // Float accumulator to avoid truncation jitter
     private float heightAccum;
+    private bool initialized;
 
     void Awake()
     {
-        pixelPerfectCamera = Camera.main.GetComponent<PixelPerfectCamera>();
-        input = new CameraInputActions();
-        input.Enable();
-        if (cameraSize == null) cameraSize = new CameraSize(640, 360);
-        heightAccum = cameraSize.height;
+        pixelPerfectCamera = Camera.main?.GetComponent<PixelPerfectCamera>();
+        if (pixelPerfectCamera == null)
+        {
+            Debug.LogError("PixelPerfectCamera not found on main camera.");
+            enabled = false;
+            return;
+        }
+
+        // Derive starting size
+        float screenAspect = (float)Screen.width / Screen.height;
+
+        if (cameraSize.height <= 0)
+        {
+            // Prefer existing ref resolution if valid
+            if (pixelPerfectCamera.refResolutionY > 0)
+            {
+                cameraSize.height = pixelPerfectCamera.refResolutionY;
+                cameraSize.width = pixelPerfectCamera.refResolutionX;
+            }
+            else
+            {
+                cameraSize.height = Mathf.Clamp(360, minHeight, maxHeight);
+                cameraSize.width = Mathf.RoundToInt(cameraSize.height * screenAspect);
+            }
+        }
+
+        if (matchScreenAspectOnStart)
+        {
+            cameraSize.height = Mathf.Clamp(cameraSize.height, minHeight, maxHeight);
+            cameraSize.width = Mathf.RoundToInt(cameraSize.height * screenAspect);
+        }
+
+        // Even dimensions (avoid subpixel artifacts)
+        cameraSize.height &= ~1;
+        cameraSize.width &= ~1;
+
+        heightAccum = cameraSize.height; // Prevent first zoom jump
         ApplySize();
-    }
 
-    void OnEnable()
-    {
+        initialized = true;
+
+        input = InputSystem.actions.FindActionMap("Camera");
+        if (input == null)
+        {
+            Debug.LogError("[CameraManager] ActionMap 'Camera' not found.");
+            enabled = false;
+            return;
+        }
+        moveAction = input.FindAction("Move");
+        zoomAction = input.FindAction("Zoom");
         input.Enable();
-    }
-
-    void OnDisable()
-    {
-        input.Disable();
     }
 
     void Update()
     {
-        Vector2 move = input.Player.Move.ReadValue<Vector2>();
+        if (!initialized) return;
+
+        Vector2 move = moveAction.ReadValue<Vector2>();
         if (move.sqrMagnitude > 0f)
         {
             pixelPerfectCamera.transform.position +=
                 new Vector3(move.x, move.y, 0f) * moveSpeed * Time.unscaledDeltaTime;
         }
 
-        float zoomAxis = input.Player.Zoom.ReadValue<float>();
+        float zoomAxis = zoomAction.ReadValue<float>();
         if (Mathf.Abs(zoomAxis) > 0.0001f)
         {
             heightAccum -= zoomAxis * zoomSpeed * Time.unscaledDeltaTime;
@@ -68,8 +110,12 @@ public class CameraManager : MonoBehaviour
 
     private void UpdateIntResolutionFromAccum()
     {
-        cameraSize.height = (int)Mathf.Round(heightAccum) & ~1;
-        cameraSize.width = ((int)Mathf.Round(cameraSize.height * (16f / 9f))) & ~1;
+        int newHeight = (int)Mathf.Round(heightAccum) & ~1;
+        if (newHeight == cameraSize.height) return;
+
+        cameraSize.height = newHeight;
+        float screenAspect = (float)Screen.width / Screen.height;
+        cameraSize.width = ((int)Mathf.Round(cameraSize.height * screenAspect)) & ~1;
         ApplySize();
     }
 
@@ -79,6 +125,8 @@ public class CameraManager : MonoBehaviour
         pixelPerfectCamera.refResolutionY = cameraSize.height;
     }
 
-    public void EnableMovement() => input.Enable();
-    public void DisableMovement() => input.Disable();
+    public void EnableMovement() => input?.Enable();
+    public void DisableMovement() => input?.Disable();
+    void OnEnable() => input?.Enable();
+    void OnDisable() => input?.Disable();
 }

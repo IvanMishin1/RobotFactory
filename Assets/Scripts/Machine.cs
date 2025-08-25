@@ -43,6 +43,7 @@ public class Machine : MonoBehaviour
                     {
                         if (audioSource != null && !audioSource.isPlaying)
                         {
+                            audioSource.pitch = Time.timeScale;
                             audioSource.PlayOneShot(clips[Random.Range(0, clips.Length)]);
                         }
                     }
