@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -8,7 +9,11 @@ public class Machine : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip[] clips;
     private GameObject itemsContainer;
-
+    public Dictionary<string, string> Recipies = new Dictionary<string, string>()
+    {
+        {"ore", "ingot"},
+        {"ingot", "ore"}
+    };
     void Awake()
     {
         itemsContainer = GameObject.Find("ItemsContainer");
@@ -30,11 +35,9 @@ public class Machine : MonoBehaviour
                         Item item = child.GetComponent<Item>();
                         if (!item.hasBeenProcessed)
                         {
-                            if (item.type == "ore")
-                                item.SetItemType("ingot");
-                            else if (item.type == "ingot")
-                                item.SetItemType("ore");
-            
+                            Recipies.TryGetValue(item.name, out string result);
+                            if (!String.IsNullOrEmpty(result))
+                                item.SetItemType(result);
                             item.hasBeenProcessed = true;
                         }
                     }

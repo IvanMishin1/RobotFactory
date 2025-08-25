@@ -5796,6 +5796,7 @@ MonoBehaviour:
   maxHeight: 1440
   moveSpeed: 5
   zoomSpeed: 200
+  matchScreenAspectOnStart: 1
 --- !u!4 &925608042
 Transform:
   m_ObjectHideFlags: 0
@@ -7436,6 +7437,7 @@ MonoBehaviour:
   Day: 0
   Hour: 0
   decimalHour: 0
+  hoursPerRealSecond: 0.033333335
 --- !u!4 &1258338027
 Transform:
   m_ObjectHideFlags: 0
@@ -7596,7 +7598,7 @@ GameObject:
   - component: {fileID: 1323919350}
   - component: {fileID: 1323919352}
   - component: {fileID: 1323919351}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: GridTilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
