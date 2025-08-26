@@ -9,7 +9,7 @@ public class Machine : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip[] clips;
     private GameObject itemsContainer;
-    public Dictionary<string, string> Recipies = new Dictionary<string, string>()
+    public Dictionary<string, string> Recipes = new Dictionary<string, string>()
     {
         {"ore", "ingot"},
         {"ingot", "ore"}
@@ -35,7 +35,7 @@ public class Machine : MonoBehaviour
                         Item item = child.GetComponent<Item>();
                         if (!item.hasBeenProcessed)
                         {
-                            Recipies.TryGetValue(item.name, out string result);
+                            Recipes.TryGetValue(item.name, out string result);
                             if (!String.IsNullOrEmpty(result))
                                 item.SetItemType(result);
                             item.hasBeenProcessed = true;
