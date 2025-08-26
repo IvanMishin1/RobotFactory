@@ -5,10 +5,12 @@ using Random = UnityEngine.Random;
 
 public class Machine : MonoBehaviour
 {
-    public string role;
+    public enum MachineRole { In, Out, Machine }
+    public MachineRole role;
     public AudioSource audioSource;
     public AudioClip[] clips;
-    private GameObject itemsContainer;
+    [SerializeField] private GameObject itemsContainer;
+    private ItemManager itemManager;
     public Dictionary<string, string> Recipes = new Dictionary<string, string>()
     {
         {"ore", "ingot"},
@@ -16,13 +18,15 @@ public class Machine : MonoBehaviour
     };
     void Awake()
     {
-        itemsContainer = GameObject.Find("ItemsContainer");
+        itemManager = GameObject.Find("ItemManager").GetComponent<ItemManager>();
+        if (itemsContainer == null)
+            Debug.LogError("Machine has no items container");
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (role == "machine")
+        if (role == MachineRole.Machine)
         {
             foreach (Transform child in itemsContainer.transform)
             {
@@ -35,7 +39,7 @@ public class Machine : MonoBehaviour
                         Item item = child.GetComponent<Item>();
                         if (!item.hasBeenProcessed)
                         {
-                            Recipes.TryGetValue(item.name, out string result);
+                            Recipes.TryGetValue(item.type, out string result);
                             if (!String.IsNullOrEmpty(result))
                                 item.SetItemType(result);
                             item.hasBeenProcessed = true;
@@ -57,7 +61,7 @@ public class Machine : MonoBehaviour
     
     void OnTriggerStay2D(Collider2D other)
     {
-        if (role == "in")
+        if (role == MachineRole.In)
         {
             if (other.CompareTag("Item"))
             {
@@ -72,14 +76,14 @@ public class Machine : MonoBehaviour
     
     void OnTriggerExit2D(Collider2D other)
     {
-        if (role == "out")
+        if (role == MachineRole.Out)
         {
             if (other.CompareTag("Item") && other.transform.parent == itemsContainer.transform)
             {
                 Item item = other.GetComponent<Item>();
                 if (item != null)
                 {
-                    item.transform.parent = GameObject.Find("ItemManager").transform;
+                    item.transform.parent = itemManager.transform;
                     Rigidbody2D rb = other.GetComponent<Rigidbody2D>();
                     rb.linearVelocity = Vector2.zero;
                     item.hasBeenProcessed = false;

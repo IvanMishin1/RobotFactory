@@ -10,6 +10,7 @@ public class SaveManager : MonoBehaviour
     private GameContext gameContext;
     private WallManager wallManager;
     private MoneyManager moneyManager;
+    private MachineManager machineManager;
     
     [Serializable]
     public class RobotData
@@ -29,6 +30,24 @@ public class SaveManager : MonoBehaviour
             this.y = position.y;
             this.paused = paused;
             this.stopped = stopped;
+        }
+    }
+
+    public class MachineData
+    {
+        public string name;
+        public float x;
+        public float y;
+        public Dictionary<string, string> recipes;
+        
+        public MachineData() {}
+        
+        public void SetValues(string name, Vector2 position, Dictionary<string, string> recipes)
+        {
+            this.name = name;
+            this.x = position.x;
+            this.y = position.y;
+            this.recipes = recipes;
         }
     }
     
@@ -83,6 +102,7 @@ public class SaveManager : MonoBehaviour
         gameContext = GameObject.Find("GameContext").GetComponent<GameContext>();
         wallManager = GameObject.Find("WallManager").GetComponent<WallManager>();
         moneyManager = GameObject.Find("MoneyManager").GetComponent<MoneyManager>();
+        machineManager = GameObject.Find("MachineManager").GetComponent<MachineManager>();
     }
     
     public void SaveGame(string gameName = null)
@@ -122,6 +142,27 @@ public class SaveManager : MonoBehaviour
         string robotsPath = Application.dataPath + "/Saves/" + gameName + "/robots.json";
         File.WriteAllText(robotsPath, robotsJson);
         
+        // Save machines
+        GameObject[] machines = GameObject.FindGameObjectsWithTag("Machine");
+        List<MachineData> machinesData = new List<MachineData>();
+        foreach (GameObject machineObject in machines)
+        {
+            Machine machineComponent = machineObject.GetComponent<Machine>();
+            if (machineComponent != null)
+            {
+                MachineData machineData = new MachineData();
+                machineData.SetValues(
+                    machineComponent.name,
+                    machineComponent.transform.position,
+                    machineComponent.Recipes
+                );
+                machinesData.Add(machineData);
+            }
+        }
+        string machinesJson = JsonSerializer.Serialize(machinesData, new JsonSerializerOptions { WriteIndented = true, IncludeFields = true });
+        string machinesPath = Application.dataPath + "/Saves/" + gameName + "/machines.json";
+        File.WriteAllText(machinesPath, machinesJson);
+        
         // Save SaveInfo
         SaveInfoData saveInfoData = new SaveInfoData();
         saveInfoData.SetValues(moneyManager.Money, wallManager.wallRect);
@@ -155,6 +196,15 @@ public class SaveManager : MonoBehaviour
             robotComponent.Pause = robot.paused;
             robotComponent.Stop = robot.stopped;
         }
+        
+        // Load machines
+        string machinesJson = File.ReadAllText(Application.dataPath + "/Saves/"+ gameName +"/machines.json"); // TODO: Handle file not found
+        List<MachineData> machinesData = JsonSerializer.Deserialize<List<MachineData>>(machinesJson, new JsonSerializerOptions { IncludeFields = true });
+        machineManager.DestroyAllMachines();
+        foreach (var machine in machinesData)
+        {
+            machineManager.CreateMachine(new Vector2(machine.x, machine.y), machine.recipes, machine.name);
+        }
 
         // Load SaveInfo
         string saveInfoJson = File.ReadAllText(Application.dataPath + "/Saves/"+ gameName +"/saveinfo.json"); // TODO: Handle file not found
@@ -187,12 +237,17 @@ public class SaveManager : MonoBehaviour
         foreach (var file in new DirectoryInfo(Application.dataPath + "/Saves/Temp/").GetFiles("*"))
             file.Delete();
         File.WriteAllText(Application.dataPath + "/Saves/" + gameName + "/robots.json", "[]");
+        File.WriteAllText(Application.dataPath + "/Saves/" + gameName + "/machines.json", "[]");
         File.WriteAllText(Application.dataPath + "/Saves/" + gameName + "/saveinfo.json", "[]");
-        robotManager.CreateRobot(new Vector2(0, 0));
         
-        var wallManager = GameObject.Find("WallManager").GetComponent<WallManager>();
         wallManager.wallRect = new RectInt(-4,-2,7,5);
         moneyManager.Money = 0;
+        robotManager.CreateRobot(new Vector2(0, 0));
+        machineManager.CreateMachine(new Vector2(0, 1), new Dictionary<string, string>()
+        {
+            {"ore", "ingot"},
+            {"ingot", "ore"}
+        });
         SaveGame();
     }
 }
