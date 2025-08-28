@@ -1,36 +1,33 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class AreaDestroy : MonoBehaviour
 {
     private GameManager gameManager;
     private MoneyManager moneyManager;
+    public Dictionary<string, int> itemValues;
     
     void Awake()
     {
         moneyManager = GameObject.Find("MoneyManager").GetComponent<MoneyManager>();
-        gameManager = Object.FindFirstObjectByType<GameManager>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
     
-    void OnTriggerStay2D(Collider2D other)
+    void OnTriggerStay2D(Collider2D itemGameObject)
     {
-        if (other.CompareTag("Item"))
+        if (!itemGameObject.CompareTag("Item"))
+            return;
+        
+        Item item = itemGameObject.GetComponent<Item>();
+        if (item != null && !item.transform.parent.CompareTag("Robot") && item.transform.parent != transform)
         {
-            Item item = other.GetComponent<Item>();
-            if (item != null && !item.transform.parent.CompareTag("Robot") && item.transform.parent != transform)
+            itemValues.TryGetValue(item.type, out int value);
+            if (value > 0)
             {
-                ItemExited(item);
-                Destroy(other.gameObject);
+                moneyManager.AddMoney(value);
+                Destroy(item.gameObject);
             }
         }
-    }
-    
-    public void ItemExited(Item item)
-    {
-        moneyManager.AddMoney((item.type switch
-        {
-            "ore" => 1,
-            "ingot" => 2,
-            _ => 0
-        }));
+        
     }
 }

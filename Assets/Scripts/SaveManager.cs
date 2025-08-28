@@ -21,8 +21,6 @@ public class SaveManager : MonoBehaviour
         public bool paused;
         public bool stopped;
         
-        public RobotData() {}
-        
         public void SetValues(string name, Vector2 position, bool paused, bool stopped)
         {
             this.name = name;
@@ -40,8 +38,6 @@ public class SaveManager : MonoBehaviour
         public float y;
         public Dictionary<string, string> recipes;
         
-        public MachineData() {}
-        
         public void SetValues(string name, Vector2 position, Dictionary<string, string> recipes)
         {
             this.name = name;
@@ -50,24 +46,22 @@ public class SaveManager : MonoBehaviour
             this.recipes = recipes;
         }
     }
-    
-    public class ItemData
+
+    public class AreaData
     {
         public string name;
-        public string type;
         public float x;
         public float y;
-        public string robot;
+        public Dictionary<string, int> destroy;
+        public List<AreaSpawn.Quantity> spawn;
         
-        public ItemData() {}
-        
-        public void SetValues(string name, string type, Vector2 position, string robot = null)
+        public void SetValues(string name, Vector2 position, Dictionary<string, int> destroy, List<AreaSpawn.Quantity> spawn)
         {
             this.name = name;
-            this.type = type;
-            this.robot = robot;
             this.x = position.x;
             this.y = position.y;
+            this.destroy = destroy;
+            this.spawn = spawn;
         }
     }
 
@@ -162,6 +156,8 @@ public class SaveManager : MonoBehaviour
         string machinesJson = JsonSerializer.Serialize(machinesData, new JsonSerializerOptions { WriteIndented = true, IncludeFields = true });
         string machinesPath = Application.dataPath + "/Saves/" + gameName + "/machines.json";
         File.WriteAllText(machinesPath, machinesJson);
+        
+        // Save areas
         
         // Save SaveInfo
         SaveInfoData saveInfoData = new SaveInfoData();

@@ -21,11 +21,14 @@ public class AreaSpawn : MonoBehaviour
     private ItemManager itemManager;
     
 
-    void Start()
+    void Awake()
     {
         timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
         itemManager = GameObject.Find("ItemManager").GetComponent<ItemManager>();
         itemPrefab = Resources.Load<GameObject>("Prefabs/Item");
+    }
+    void Start()
+    {
         CalculateSpawnTimes();
         CalculateAreaBounds();
     }
