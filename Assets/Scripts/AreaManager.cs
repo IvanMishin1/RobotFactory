@@ -13,16 +13,19 @@ public class AreaManager : MonoBehaviour
         if (areaPrefab == null)
             Debug.LogError("Area prefab not found in Resources/Prefabs/Area");
     }
-    public GameObject CreateArea(Vector2 position, Dictionary<string,int> Destroy, string areaName = null)
+    public Area CreateArea(Vector2 position, List<Area.InputData> input, List<Area.OutputData> output, string areaName = null)
     {
-        GameObject area = Instantiate(areaPrefab, position, Quaternion.identity);
+        GameObject area = Instantiate(areaPrefab, position, Quaternion.identity, transform);
         if (String.IsNullOrEmpty(areaName))
             area.name = "Area" + areaId++;
         else
             area.name = areaName;
-        area.transform.parent = transform;
         Area areaComponent = area.GetComponent<Area>();
-        return area;
+        input ??= new List<Area.InputData>();
+        output ??= new List<Area.OutputData>();
+        areaComponent.Input = input;
+        areaComponent.Output = output;
+        return areaComponent;
     }
     public void DestroyAllAreas()
     {

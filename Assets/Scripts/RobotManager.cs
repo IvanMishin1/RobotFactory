@@ -14,13 +14,12 @@ public class RobotManager : MonoBehaviour
     }
     public Robot CreateRobot(Vector2 position, string robotName = null)
     {
-        GameObject robot = Instantiate(robotPrefab, position, Quaternion.identity);
+        GameObject robot = Instantiate(robotPrefab, position, Quaternion.identity, transform);
         if (String.IsNullOrEmpty(robotName))
             robot.name = "Robot" + robotId++;
         else
             robot.name = robotName;
         robot.transform.position = position;
-        robot.transform.parent = transform;
         return robot.GetComponent<Robot>();
     }
     public void DestroyRobot(Robot robot)

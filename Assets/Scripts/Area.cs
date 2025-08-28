@@ -1,30 +1,56 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using UnityEngine;
 
-public class AreaSpawn : MonoBehaviour
+public class Area : MonoBehaviour
 {
     [Serializable]
-    public class Quantity
+    public class OutputData
     {
         public string itemType;
         public int amount;
-        [NonSerialized] public float nextSpawnTime;
-        [NonSerialized] public float spawnInterval;
+        [NonSerialized][JsonIgnore] public float nextSpawnTime;
+        [NonSerialized][JsonIgnore] public float spawnInterval;
     }
     
-    public List<Quantity> output;
+    [Serializable]
+    public class InputData
+    {
+        public string itemType;
+        public int value;
+    }
+    
+    public List<OutputData> Output;
+    public List<InputData> Input;
+    private Dictionary<string, int> inputDict // TODO: This is inefficient
+    {
+        get
+        {
+            var dict = new Dictionary<string, int>();
+            foreach (var item in Input)
+            {
+                dict[item.itemType] = item.value;
+            }
+            return dict;
+        }
+    }
+    
     private GameObject itemPrefab;
     private Bounds areaBounds;
     private TimeManager timeManager;
     private int currentDay;
     private ItemManager itemManager;
+    private GameManager gameManager;
+    private MoneyManager moneyManager;
     
 
     void Awake()
     {
         timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
         itemManager = GameObject.Find("ItemManager").GetComponent<ItemManager>();
+        moneyManager = GameObject.Find("MoneyManager").GetComponent<MoneyManager>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         itemPrefab = Resources.Load<GameObject>("Prefabs/Item");
     }
     void Start()
@@ -35,13 +61,15 @@ public class AreaSpawn : MonoBehaviour
 
     void Update()
     {
+        if (Output.Count == 0)
+            return;
         if (timeManager.Day != currentDay)
         {
             currentDay = timeManager.Day;
             CalculateSpawnTimes();
         }
 
-        foreach (var item in output)
+        foreach (var item in Output)
         {
             if (timeManager.Hour >= item.nextSpawnTime)
             {
@@ -53,7 +81,7 @@ public class AreaSpawn : MonoBehaviour
 
     private void CalculateSpawnTimes()
     {
-        foreach (var item in output)
+        foreach (var item in Output)
         {
             item.spawnInterval = 24f / Math.Max(1, item.amount);
             item.nextSpawnTime = item.spawnInterval / 2f;
@@ -75,5 +103,23 @@ public class AreaSpawn : MonoBehaviour
     private void CalculateAreaBounds()
     {
         areaBounds = new Bounds(transform.position, new Vector3(transform.localScale.x, transform.localScale.y, 0));
+    }
+    
+    void OnTriggerStay2D(Collider2D itemGameObject)
+    {
+        // This handles input into the area
+        if (!itemGameObject.CompareTag("Item"))
+            return;
+        
+        Item item = itemGameObject.GetComponent<Item>();
+        if (item != null && !item.transform.parent.CompareTag("Robot") && item.transform.parent != transform)
+        {
+            inputDict.TryGetValue(item.type, out int value);
+            if (value > 0)
+            {
+                moneyManager.AddMoney(value);
+                Destroy(item.gameObject);
+            }
+        }
     }
 }

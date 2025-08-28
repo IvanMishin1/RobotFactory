@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using System.Text.Json;
 
@@ -11,6 +12,7 @@ public class SaveManager : MonoBehaviour
     private WallManager wallManager;
     private MoneyManager moneyManager;
     private MachineManager machineManager;
+    private AreaManager areaManager;
     
     [Serializable]
     public class RobotData
@@ -52,16 +54,16 @@ public class SaveManager : MonoBehaviour
         public string name;
         public float x;
         public float y;
-        public Dictionary<string, int> destroy;
-        public List<AreaSpawn.Quantity> spawn;
+        public List<Area.InputData> input;
+        public List<Area.OutputData> output;
         
-        public void SetValues(string name, Vector2 position, Dictionary<string, int> destroy, List<AreaSpawn.Quantity> spawn)
+        public void SetValues(string name, Vector2 position, List<Area.InputData> input, List<Area.OutputData> output)
         {
             this.name = name;
             this.x = position.x;
             this.y = position.y;
-            this.destroy = destroy;
-            this.spawn = spawn;
+            this.input = input;
+            this.output = output;
         }
     }
 
@@ -97,6 +99,7 @@ public class SaveManager : MonoBehaviour
         wallManager = GameObject.Find("WallManager").GetComponent<WallManager>();
         moneyManager = GameObject.Find("MoneyManager").GetComponent<MoneyManager>();
         machineManager = GameObject.Find("MachineManager").GetComponent<MachineManager>();
+        areaManager = GameObject.Find("AreaManager").GetComponent<AreaManager>();
     }
     
     public void SaveGame(string gameName = null)
@@ -108,11 +111,8 @@ public class SaveManager : MonoBehaviour
                 throw new ArgumentException("gameName cannot be null, empty, or whitespace.", nameof(gameName));
         }
         
-        // Creating missing directories
-        if (!Directory.Exists(Application.dataPath + "/Saves/"))
-            Directory.CreateDirectory(Application.dataPath + "/Saves/");
-        if (!Directory.Exists(Application.dataPath + "/Saves/Temp/"))
-            Directory.CreateDirectory(Application.dataPath + "/Saves/Temp/");
+        CreateDirectories(gameName);
+        CreateFiles(gameName);
         
         // Save robots
         GameObject[] robots = GameObject.FindGameObjectsWithTag("Robot");
@@ -158,6 +158,26 @@ public class SaveManager : MonoBehaviour
         File.WriteAllText(machinesPath, machinesJson);
         
         // Save areas
+        GameObject[] areas = GameObject.FindGameObjectsWithTag("Area");
+        List<AreaData> areasData = new List<AreaData>();
+        foreach (GameObject areaObject in areas)
+        {
+            Area areaComponent = areaObject.GetComponent<Area>();
+            if (areaComponent != null)
+            {
+                AreaData areaData = new AreaData();
+                areaData.SetValues(
+                    areaComponent.name,
+                    areaComponent.transform.position,
+                    areaComponent.Input,
+                    areaComponent.Output
+                );
+                areasData.Add(areaData);
+            }
+        }
+        string areasJson = JsonSerializer.Serialize(areasData, new JsonSerializerOptions { WriteIndented = true, IncludeFields = true });
+        string areasPath = Application.dataPath + "/Saves/" + gameName + "/areas.json";
+        File.WriteAllText(areasPath, areasJson);
         
         // Save SaveInfo
         SaveInfoData saveInfoData = new SaveInfoData();
@@ -176,14 +196,11 @@ public class SaveManager : MonoBehaviour
         if (string.IsNullOrWhiteSpace(gameName))
             throw new ArgumentException("gameName cannot be null, empty, or whitespace.", nameof(gameName));
         
-        // Creating missing directories
-        if (!Directory.Exists(Application.dataPath + "/Saves/"))
-            Directory.CreateDirectory(Application.dataPath + "/Saves/");
-        if (!Directory.Exists(Application.dataPath + "/Saves/Temp/"))
-            Directory.CreateDirectory(Application.dataPath + "/Saves/Temp/");
+        CreateDirectories(gameName);
+        CreateFiles(gameName);
         
         // Load robots
-        string robotsJson = File.ReadAllText(Application.dataPath + "/Saves/"+ gameName +"/robots.json"); // TODO: Handle file not found
+        string robotsJson = File.ReadAllText(Application.dataPath + "/Saves/"+ gameName +"/robots.json");
         List<RobotData> robotsData = JsonSerializer.Deserialize<List<RobotData>>(robotsJson, new JsonSerializerOptions { IncludeFields = true });
         robotManager.DestroyAllRobots();
         foreach (var robot in robotsData)
@@ -194,16 +211,25 @@ public class SaveManager : MonoBehaviour
         }
         
         // Load machines
-        string machinesJson = File.ReadAllText(Application.dataPath + "/Saves/"+ gameName +"/machines.json"); // TODO: Handle file not found
+        string machinesJson = File.ReadAllText(Application.dataPath + "/Saves/"+ gameName +"/machines.json");
         List<MachineData> machinesData = JsonSerializer.Deserialize<List<MachineData>>(machinesJson, new JsonSerializerOptions { IncludeFields = true });
         machineManager.DestroyAllMachines();
         foreach (var machine in machinesData)
         {
             machineManager.CreateMachine(new Vector2(machine.x, machine.y), machine.recipes, machine.name);
         }
-
+        
+        // Load areas
+        string areasJson = File.ReadAllText(Application.dataPath + "/Saves/"+ gameName +"/areas.json");
+        List<AreaData> areasData = JsonSerializer.Deserialize<List<AreaData>>(areasJson, new JsonSerializerOptions { IncludeFields = true });
+        areaManager.DestroyAllAreas();
+        foreach (var area in areasData)
+        {
+            areaManager.CreateArea(new Vector2(area.x, area.y), area.input, area.output, area.name);
+        }
+        
         // Load SaveInfo
-        string saveInfoJson = File.ReadAllText(Application.dataPath + "/Saves/"+ gameName +"/saveinfo.json"); // TODO: Handle file not found
+        string saveInfoJson = File.ReadAllText(Application.dataPath + "/Saves/"+ gameName +"/saveinfo.json");
         SaveInfoData saveInfoData = JsonSerializer.Deserialize<SaveInfoData>(saveInfoJson, new JsonSerializerOptions { IncludeFields = true });
         moneyManager.Money = saveInfoData.money;
         wallManager.wallRect = new RectInt(
@@ -214,8 +240,7 @@ public class SaveManager : MonoBehaviour
         );
         
         // Load Lua scripts
-        foreach (var file in new DirectoryInfo(Application.dataPath + "/Saves/Temp/").GetFiles("*"))
-            file.Delete();
+        ClearTempDirectory();
         foreach (var file in new DirectoryInfo(Application.dataPath + "/Saves/" + gameName).GetFiles("*.lua"))
             file.CopyTo(Application.dataPath + "/Saves/Temp/" + file.Name, true);
         
@@ -227,24 +252,52 @@ public class SaveManager : MonoBehaviour
         if (string.IsNullOrWhiteSpace(gameName))
             throw new ArgumentException("gameName cannot be null, empty, or whitespace.", nameof(gameName));
         
-        Directory.CreateDirectory(Application.dataPath + "/Saves/" + gameName); ;
-        if (!Directory.Exists(Application.dataPath + "/Saves/Temp/"))
-            Directory.CreateDirectory(Application.dataPath + "/Saves/Temp/");
-        foreach (var file in new DirectoryInfo(Application.dataPath + "/Saves/Temp/").GetFiles("*"))
-            file.Delete();
-        File.WriteAllText(Application.dataPath + "/Saves/" + gameName + "/robots.json", "[]");
-        File.WriteAllText(Application.dataPath + "/Saves/" + gameName + "/machines.json", "[]");
-        File.WriteAllText(Application.dataPath + "/Saves/" + gameName + "/saveinfo.json", "[]");
+        CreateDirectories(gameName);
+        CreateFiles(gameName);
+        ClearTempDirectory();
         
         wallManager.wallRect = new RectInt(-4,-2,7,5);
         moneyManager.Money = 0;
         robotManager.CreateRobot(new Vector2(0, 0));
-        machineManager.CreateMachine(new Vector2(0, 1), new Dictionary<string, string>()
+        machineManager.CreateMachine(new Vector2(0, 2), new Dictionary<string, string>()
         {
             {"ore", "ingot"},
             {"ingot", "ore"}
         });
+        
+        areaManager.CreateArea(new Vector2(2, 0), new List<Area.InputData> { new Area.InputData { itemType = "ingot", value = 2 } }, null);
+        areaManager.CreateArea(new Vector2(-2, 0), null, new List<Area.OutputData> { new Area.OutputData { itemType = "ore", amount = 64 } });
+        
         SaveGame();
     }
-}
+    
+    private void CreateDirectories(string gameName)
+    {
+        if (!Directory.Exists(Application.dataPath + "/Saves/"))
+            Directory.CreateDirectory(Application.dataPath + "/Saves/");
+        if (!Directory.Exists(Application.dataPath + "/Saves/Temp/"))
+            Directory.CreateDirectory(Application.dataPath + "/Saves/Temp/");
+        if (!Directory.Exists(Application.dataPath + "/Saves/" + gameName))
+            Directory.CreateDirectory(Application.dataPath + "/Saves/" + gameName);
+    }
 
+    private void CreateFiles(string gameName)
+    {
+        if (!File.Exists(Application.dataPath + "/Saves/" + gameName + "/robots.json"))
+            File.WriteAllText(Application.dataPath + "/Saves/" + gameName + "/robots.json", "[]");
+        if (!File.Exists(Application.dataPath + "/Saves/" + gameName + "/machines.json"))
+            File.WriteAllText(Application.dataPath + "/Saves/" + gameName + "/machines.json", "[]");
+        if (!File.Exists(Application.dataPath + "/Saves/" + gameName + "/areas.json"))
+            File.WriteAllText(Application.dataPath + "/Saves/" + gameName + "/areas.json", "[]");
+        if (!File.Exists(Application.dataPath + "/Saves/" + gameName + "/saveinfo.json"))
+            File.WriteAllText(Application.dataPath + "/Saves/" + gameName + "/saveinfo.json", "[]");
+    }
+    
+    private void ClearTempDirectory()
+    {
+        if (!Directory.Exists(Application.dataPath + "/Saves/Temp/"))
+            return;
+        foreach (var file in new DirectoryInfo(Application.dataPath + "/Saves/Temp/").GetFiles("*"))
+            file.Delete();
+    }
+}

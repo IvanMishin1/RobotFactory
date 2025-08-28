@@ -16,13 +16,12 @@ public class ItemManager : MonoBehaviour
     public Item CreateItem(Vector2 position, string itemType, string itemName)
     {
         GameObject item = Instantiate(itemPrefab, position, Quaternion.identity, transform);
+        Item itemComponent = item.GetComponent<Item>();
+        itemComponent.SetItemType(itemType);
         if (String.IsNullOrEmpty(itemName))
             item.name = "Item" + itemId++;
         else
             item.name = itemName;
-        //item.transform.position = position;
-        Item itemComponent = item.GetComponent<Item>();
-        itemComponent.SetItemType(itemType);
         return itemComponent;
     }
 

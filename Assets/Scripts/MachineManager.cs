@@ -15,12 +15,12 @@ public class MachineManager : MonoBehaviour
     }
     public Machine CreateMachine(Vector2 position, Dictionary<string, string> Recipes, string machineName = null)
     {
-        GameObject machine = Instantiate(machinePrefab, position, Quaternion.identity);
+        GameObject machine = Instantiate(machinePrefab, position, Quaternion.identity, transform);
+
         if (String.IsNullOrEmpty(machineName))
             machine.name = "Machine" + machineId++;
         else
             machine.name = machineName;
-        machine.transform.parent = transform;
         Machine machineComponent = machine.GetComponent<Machine>();
         machineComponent.Recipes = Recipes;
         return machineComponent;
