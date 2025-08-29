@@ -13,6 +13,7 @@ public class SaveManager : MonoBehaviour
     private MoneyManager moneyManager;
     private MachineManager machineManager;
     private AreaManager areaManager;
+    private TimeManager timeManager;
     
     [Serializable]
     public class RobotData
@@ -72,10 +73,13 @@ public class SaveManager : MonoBehaviour
     {
         public long money;
         public WallRectInt wallRect;
-        public SaveInfoData() {}
-        public void SetValues(long money, RectInt wallRect)
+        public int day;
+        public int hour;
+        public void SetValues(long money, RectInt wallRect, int day, int hour)
         {
             this.money = money;
+            this.day = day;
+            this.hour = hour;
             this.wallRect = new WallRectInt
             {
                 x = wallRect.x,
@@ -100,6 +104,7 @@ public class SaveManager : MonoBehaviour
         moneyManager = GameObject.Find("MoneyManager").GetComponent<MoneyManager>();
         machineManager = GameObject.Find("MachineManager").GetComponent<MachineManager>();
         areaManager = GameObject.Find("AreaManager").GetComponent<AreaManager>();
+        timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
     }
     
     public void SaveGame(string gameName = null)
@@ -113,6 +118,14 @@ public class SaveManager : MonoBehaviour
         
         CreateDirectories(gameName);
         CreateFiles(gameName);
+        
+        // Save SaveInfo
+        SaveInfoData saveInfoData = new SaveInfoData();
+        var (day, hour) = timeManager.GetTime();
+        saveInfoData.SetValues(moneyManager.Money, wallManager.wallRect, day, hour);
+        string saveInfoJson = JsonSerializer.Serialize(saveInfoData, new JsonSerializerOptions { WriteIndented = true, IncludeFields = true });
+        string saveInfoPath = Application.dataPath + "/Saves/" + gameName + "/saveinfo.json";
+        File.WriteAllText(saveInfoPath, saveInfoJson);
         
         // Save robots
         GameObject[] robots = GameObject.FindGameObjectsWithTag("Robot");
@@ -179,13 +192,6 @@ public class SaveManager : MonoBehaviour
         string areasPath = Application.dataPath + "/Saves/" + gameName + "/areas.json";
         File.WriteAllText(areasPath, areasJson);
         
-        // Save SaveInfo
-        SaveInfoData saveInfoData = new SaveInfoData();
-        saveInfoData.SetValues(moneyManager.Money, wallManager.wallRect);
-        string saveInfoJson = JsonSerializer.Serialize(saveInfoData, new JsonSerializerOptions { WriteIndented = true, IncludeFields = true });
-        string saveInfoPath = Application.dataPath + "/Saves/" + gameName + "/saveinfo.json";
-        File.WriteAllText(saveInfoPath, saveInfoJson);
-        
         // Save Lua scripts
         foreach (var file in new DirectoryInfo(Application.dataPath + "/Saves/Temp").GetFiles("*.lua"))
             file.CopyTo(Application.dataPath + "/Saves/" + gameName + "/" + file.Name, true);        
@@ -198,6 +204,18 @@ public class SaveManager : MonoBehaviour
         
         CreateDirectories(gameName);
         CreateFiles(gameName);
+        
+        // Load SaveInfo
+        string saveInfoJson = File.ReadAllText(Application.dataPath + "/Saves/"+ gameName +"/saveinfo.json");
+        SaveInfoData saveInfoData = JsonSerializer.Deserialize<SaveInfoData>(saveInfoJson, new JsonSerializerOptions { IncludeFields = true });
+        moneyManager.Money = saveInfoData.money;
+        timeManager.SetTime(saveInfoData.day, saveInfoData.hour); // TODO: Validate this
+        wallManager.wallRect = new RectInt(
+            saveInfoData.wallRect.x,
+            saveInfoData.wallRect.y,
+            saveInfoData.wallRect.width,
+            saveInfoData.wallRect.height
+        );
         
         // Load robots
         string robotsJson = File.ReadAllText(Application.dataPath + "/Saves/"+ gameName +"/robots.json");
@@ -227,17 +245,6 @@ public class SaveManager : MonoBehaviour
         {
             areaManager.CreateArea(new Vector2(area.x, area.y), area.input, area.output, area.name);
         }
-        
-        // Load SaveInfo
-        string saveInfoJson = File.ReadAllText(Application.dataPath + "/Saves/"+ gameName +"/saveinfo.json");
-        SaveInfoData saveInfoData = JsonSerializer.Deserialize<SaveInfoData>(saveInfoJson, new JsonSerializerOptions { IncludeFields = true });
-        moneyManager.Money = saveInfoData.money;
-        wallManager.wallRect = new RectInt(
-            saveInfoData.wallRect.x,
-            saveInfoData.wallRect.y,
-            saveInfoData.wallRect.width,
-            saveInfoData.wallRect.height
-        );
         
         // Load Lua scripts
         ClearTempDirectory();

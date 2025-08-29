@@ -84,7 +84,7 @@ public class Area : MonoBehaviour
         foreach (var item in Output)
         {
             item.spawnInterval = 24f / Math.Max(1, item.amount);
-            item.nextSpawnTime = item.spawnInterval / 2f;
+            item.nextSpawnTime = timeManager != null ? timeManager.Hour + item.spawnInterval : item.spawnInterval;
         }
     }
 

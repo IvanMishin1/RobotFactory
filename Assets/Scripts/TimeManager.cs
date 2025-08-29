@@ -1,3 +1,4 @@
+using Unity.XR.GoogleVr;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -34,6 +35,14 @@ public class TimeManager : MonoBehaviour
         }
         Hour = (int)decimalHour;
     }
+
+    public void SetTime(int day, int hour)
+    {
+        Day = day;
+        Hour = hour;
+        decimalHour = hour;
+    }
+    public (int, int) GetTime() => (Day, Hour);
 
     private void OnTimeScalePerformed(InputAction.CallbackContext ctx)
     {
