@@ -9,10 +9,12 @@ public class GameManager : MonoBehaviour
 {
     private GameContext gameContext;
     private SaveManager saveManager;
+    private TutorialManager tutorialManager;
     
 	void Awake()
 	{
         saveManager = GameObject.Find("SaveManager").GetComponent<SaveManager>();
+        tutorialManager = GameObject.Find("TutorialManager").GetComponent<TutorialManager>();
         
         GameObject gameContextObj = GameObject.Find("GameContext");
         if (gameContextObj != null)
@@ -31,6 +33,10 @@ public class GameManager : MonoBehaviour
             return;
         }
         Debug.Log($"Loading {gameContext.gameName}. New Game: {gameContext.isNewGame}");
+        if (gameContext.isTutorial)
+        {
+            
+        }
         if (gameContext.isNewGame)
         {
             saveManager.CreateGame(gameContext.gameName);

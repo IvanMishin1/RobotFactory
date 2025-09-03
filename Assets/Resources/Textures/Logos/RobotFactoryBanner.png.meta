@@ -1,0 +1,455 @@
+fileFormatVersion: 2
+guid: 7e5b428089789084bb755f64875fc472
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -872016788082681808
+    second: RobotFactoryLogoTransparent_0
+  - first:
+      213: -4051701515213513044
+    second: RobotFactoryLogoTransparent_1
+  - first:
+      213: 3692481919466117943
+    second: RobotFactoryLogoTransparent_2
+  - first:
+      213: 7395794812077131507
+    second: RobotFactoryLogoTransparent_3
+  - first:
+      213: -2799546403887895795
+    second: RobotFactoryLogoTransparent_4
+  - first:
+      213: -3893329320457621746
+    second: RobotFactoryLogoTransparent_5
+  - first:
+      213: -937352555517791162
+    second: RobotFactoryLogoTransparent_6
+  - first:
+      213: 7648452243407316970
+    second: RobotFactoryLogoTransparent_7
+  - first:
+      213: 1236193458222322728
+    second: RobotFactoryLogoTransparent_8
+  - first:
+      213: -4162774362254175241
+    second: RobotFactoryLogoTransparent_9
+  - first:
+      213: -722683266965846346
+    second: RobotFactoryLogoTransparent_10
+  - first:
+      213: -1673423481948833917
+    second: RobotFactoryLogoTransparent_11
+  - first:
+      213: -5756864720727715723
+    second: RobotFactoryLogoTransparent_12
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: RobotFactoryLogoTransparent_0
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 34
+        width: 152
+        height: 182
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0389724f959f5e3f0800000000000000
+      internalID: -872016788082681808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RobotFactoryLogoTransparent_1
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 123
+        width: 48
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cae59c150f675c7c0800000000000000
+      internalID: -4051701515213513044
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RobotFactoryLogoTransparent_2
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 122
+        width: 46
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73b945dfdb45e3330800000000000000
+      internalID: 3692481919466117943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RobotFactoryLogoTransparent_3
+      rect:
+        serializedVersion: 2
+        x: 419
+        y: 122
+        width: 44
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f6c88d623423a660800000000000000
+      internalID: 7395794812077131507
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RobotFactoryLogoTransparent_4
+      rect:
+        serializedVersion: 2
+        x: 472
+        y: 122
+        width: 46
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d0b2a08d0630629d0800000000000000
+      internalID: -2799546403887895795
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RobotFactoryLogoTransparent_5
+      rect:
+        serializedVersion: 2
+        x: 523
+        y: 123
+        width: 49
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e0fa28c5c9d18f9c0800000000000000
+      internalID: -3893329320457621746
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RobotFactoryLogoTransparent_6
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 46
+        width: 45
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 644be0b21daddf2f0800000000000000
+      internalID: -937352555517791162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RobotFactoryLogoTransparent_7
+      rect:
+        serializedVersion: 2
+        x: 363
+        y: 45
+        width: 46
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae725d9cac2c42a60800000000000000
+      internalID: 7648452243407316970
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RobotFactoryLogoTransparent_8
+      rect:
+        serializedVersion: 2
+        x: 418
+        y: 45
+        width: 46
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 824d00f8667d72110800000000000000
+      internalID: 1236193458222322728
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RobotFactoryLogoTransparent_9
+      rect:
+        serializedVersion: 2
+        x: 469
+        y: 46
+        width: 49
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7f39cb9d5cada36c0800000000000000
+      internalID: -4162774362254175241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RobotFactoryLogoTransparent_10
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 45
+        width: 46
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6b6c16bc56388f5f0800000000000000
+      internalID: -722683266965846346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RobotFactoryLogoTransparent_11
+      rect:
+        serializedVersion: 2
+        x: 583
+        y: 46
+        width: 44
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38774a7953ec6c8e0800000000000000
+      internalID: -1673423481948833917
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RobotFactoryLogoTransparent_12
+      rect:
+        serializedVersion: 2
+        x: 631
+        y: 30
+        width: 52
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 570db05a9028b10b0800000000000000
+      internalID: -5756864720727715723
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      RobotFactoryLogoTransparent_0: -872016788082681808
+      RobotFactoryLogoTransparent_1: -4051701515213513044
+      RobotFactoryLogoTransparent_10: -722683266965846346
+      RobotFactoryLogoTransparent_11: -1673423481948833917
+      RobotFactoryLogoTransparent_12: -5756864720727715723
+      RobotFactoryLogoTransparent_2: 3692481919466117943
+      RobotFactoryLogoTransparent_3: 7395794812077131507
+      RobotFactoryLogoTransparent_4: -2799546403887895795
+      RobotFactoryLogoTransparent_5: -3893329320457621746
+      RobotFactoryLogoTransparent_6: -937352555517791162
+      RobotFactoryLogoTransparent_7: 7648452243407316970
+      RobotFactoryLogoTransparent_8: 1236193458222322728
+      RobotFactoryLogoTransparent_9: -4162774362254175241
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

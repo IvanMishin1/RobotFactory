@@ -75,6 +75,7 @@ public class SaveManager : MonoBehaviour
         public WallRectInt wallRect;
         public int day;
         public int hour;
+        public string version = Application.version;
         public void SetValues(long money, RectInt wallRect, int day, int hour)
         {
             this.money = money;
@@ -208,6 +209,8 @@ public class SaveManager : MonoBehaviour
         // Load SaveInfo
         string saveInfoJson = File.ReadAllText(Application.dataPath + "/Saves/"+ gameName +"/saveinfo.json");
         SaveInfoData saveInfoData = JsonSerializer.Deserialize<SaveInfoData>(saveInfoJson, new JsonSerializerOptions { IncludeFields = true });
+        if (saveInfoData.version != Application.version)
+            Debug.LogWarning($"Save file version ({saveInfoData.version}) does not match game version ({Application.version}).");
         moneyManager.Money = saveInfoData.money;
         timeManager.SetTime(saveInfoData.day, saveInfoData.hour); // TODO: Validate this
         wallManager.wallRect = new RectInt(
@@ -297,7 +300,7 @@ public class SaveManager : MonoBehaviour
         if (!File.Exists(Application.dataPath + "/Saves/" + gameName + "/areas.json"))
             File.WriteAllText(Application.dataPath + "/Saves/" + gameName + "/areas.json", "[]");
         if (!File.Exists(Application.dataPath + "/Saves/" + gameName + "/saveinfo.json"))
-            File.WriteAllText(Application.dataPath + "/Saves/" + gameName + "/saveinfo.json", "[]");
+            File.WriteAllText(Application.dataPath + "/Saves/" + gameName + "/saveinfo.json", "{}");
     }
     
     private void ClearTempDirectory()

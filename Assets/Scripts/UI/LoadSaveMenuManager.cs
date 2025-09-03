@@ -59,6 +59,7 @@ namespace UI
             
             gameContext.gameName = gameName;
             gameContext.isNewGame = true;
+            gameContext.isTutorial = false;
             SceneManager.LoadScene("Game");
         }
 
@@ -71,7 +72,16 @@ namespace UI
             }
             gameContext.gameName = loadGameDropdown.options[loadGameDropdown.value].text;
             gameContext.isNewGame = false;
+            gameContext.isTutorial = false;
             SceneManager.LoadScene("Game"); 
+        }
+
+        public void PlayTutorial()
+        {
+            gameContext.gameName = "Tutorial";
+            gameContext.isNewGame = false;
+            gameContext.isTutorial = true;
+            SceneManager.LoadScene("Game");
         }
     
         public List<string> GetGameNames()
